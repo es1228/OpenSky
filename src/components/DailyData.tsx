@@ -1,4 +1,4 @@
-type HourlyDataProps = {
+type DailyDataProps = {
     time: string;
     temperature: string;
     summary: string;
@@ -12,7 +12,7 @@ type HourlyDataProps = {
     precipAccumulation: string;
 };
 
-export default function HourlyData(props: HourlyDataProps) {
+export default function DailyData(props: DailyDataProps) {
     return (
         <>
             <div className="flex w-full flex-col gap-2 rounded-3xl bg-neutral-50/30 p-4 backdrop-blur dark:bg-neutral-950/30">
