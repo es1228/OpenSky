@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 
 import Logo from "./components/Logo";
+import Footer from "./components/Footer";
 import Searchbar from "./components/Searchbar";
 import LocationButton from "./components/LocationButton";
 import CurrentCard from "./components/CurrentCard";
@@ -9,36 +10,63 @@ import InfoCard from "./components/InfoCard";
 import HourlyData from "./components/HourlyData";
 import DailyData from "./components/DailyData";
 import SavedLocation from "./components/SavedLocation";
+import Map from "./components/Map";
 
 type Pages = "Home" | "Currently" | "Hourly" | "Daily" | "Radar" | "Settings";
 
-function Navbar({setPageType}: {setPageType: (p: Pages) => void}) {
+function Navbar({ setPageType }: { setPageType: (p: Pages) => void }) {
     return (
         <>
             <nav className="flex flex-col rounded-3xl bg-neutral-50/30 p-4 backdrop-blur md:pr-18 dark:bg-neutral-950/30">
                 <ul className="flex flex-1 flex-row justify-center gap-4 md:flex-col">
-                    <li className="flex flex-col md:flex-row gap-2 items-center" onClick={() => setPageType("Home")}>
+                    <li
+                        className="flex flex-col items-center gap-2 md:flex-row"
+                        onClick={() => setPageType("Home")}
+                    >
                         <span className="material-symbols-rounded">home</span>
                         <p className="text-xs md:text-lg">Home</p>
                     </li>
-                    <li className="flex flex-col md:flex-row gap-2 items-center" onClick={() => setPageType("Currently")}>
-                        <span className="material-symbols-rounded">schedule</span>
+                    <li
+                        className="flex flex-col items-center gap-2 md:flex-row"
+                        onClick={() => setPageType("Currently")}
+                    >
+                        <span className="material-symbols-rounded">
+                            schedule
+                        </span>
                         <p className="text-xs md:text-lg">Currently</p>
                     </li>
-                    <li className="flex flex-col md:flex-row gap-2 items-center" onClick={() => setPageType("Hourly")}>
-                        <span className="material-symbols-rounded">calendar_clock</span>
+                    <li
+                        className="flex flex-col items-center gap-2 md:flex-row"
+                        onClick={() => setPageType("Hourly")}
+                    >
+                        <span className="material-symbols-rounded">
+                            calendar_clock
+                        </span>
                         <p className="text-xs md:text-lg">Hourly</p>
                     </li>
-                    <li className="flex flex-col md:flex-row gap-2 items-center" onClick={() => setPageType("Daily")}>
-                        <span className="material-symbols-rounded">calendar_view_week</span>
+                    <li
+                        className="flex flex-col items-center gap-2 md:flex-row"
+                        onClick={() => setPageType("Daily")}
+                    >
+                        <span className="material-symbols-rounded">
+                            calendar_view_week
+                        </span>
                         <p className="text-xs md:text-lg">Daily</p>
                     </li>
-                    <li className="flex flex-col md:flex-row gap-2 items-center" onClick={() => setPageType("Radar")}>
+                    <li
+                        className="flex flex-col items-center gap-2 md:flex-row"
+                        onClick={() => setPageType("Radar")}
+                    >
                         <span className="material-symbols-rounded">radar</span>
                         <p className="text-xs md:text-lg">Radar</p>
                     </li>
-                    <li className="flex flex-col md:flex-row gap-2 items-center md:mt-auto" onClick={() => setPageType("Settings")}>
-                        <span className="material-symbols-rounded">settings</span>
+                    <li
+                        className="flex flex-col items-center gap-2 md:mt-auto md:flex-row"
+                        onClick={() => setPageType("Settings")}
+                    >
+                        <span className="material-symbols-rounded">
+                            settings
+                        </span>
                         <p className="text-xs md:text-lg">Settings</p>
                     </li>
                 </ul>
@@ -47,12 +75,15 @@ function Navbar({setPageType}: {setPageType: (p: Pages) => void}) {
     );
 }
 
-
 function HomePage() {
     return (
         <>
             <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
-                <SavedLocation city="Miami" summary="Clear" temperature="21°C"/>
+                <SavedLocation
+                    city="Miami"
+                    summary="Clear"
+                    temperature="21°C"
+                />
             </div>
         </>
     );
@@ -116,6 +147,30 @@ function CurrentlyPage() {
                     summary="8%"
                     other="Sunny"
                 />
+                <InfoCard
+                    title="Rain Accumulation"
+                    icon="rainy"
+                    summary="0 mm"
+                    other="No Rain Expected Today"
+                />
+                <InfoCard
+                    title="Snow Accumulation"
+                    icon="weather_snowy"
+                    summary="0 mm"
+                    other="No Snow Expected Today"
+                />
+                <InfoCard
+                    title="Ice Accumulation"
+                    icon="weather_hail"
+                    summary="0 mm"
+                    other="No Ice Expected Today"
+                />
+                <InfoCard
+                    title="CAPE"
+                    icon="thunderstorm"
+                    summary="0"
+                    other="No Thunderstorms Expected Today"
+                />
             </div>
         </>
     );
@@ -125,7 +180,19 @@ function HourlyPage() {
     return (
         <>
             <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
-                <HourlyData time="10 PM" temperature="25°C" summary="Sunny" apparentTemperature="27°C" humidity="42%" dewPoint="3°C" windSpeed="20 km/h" windGust="25 km/h" windBearing="270°" precipIntensity="0" precipAccumulation="0"/>
+                <HourlyData
+                    time="10 PM"
+                    temperature="25°C"
+                    summary="Sunny"
+                    apparentTemperature="27°C"
+                    humidity="42%"
+                    dewPoint="3°C"
+                    windSpeed="20 km/h"
+                    windGust="25 km/h"
+                    windBearing="270°"
+                    precipIntensity="0"
+                    precipAccumulation="0"
+                />
             </div>
         </>
     );
@@ -135,7 +202,29 @@ function DailyPage() {
     return (
         <>
             <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
-                <DailyData time="Fri, Feb 13" temperature="25°C" summary="Sunny" apparentTemperature="27°C" humidity="42%" dewPoint="3°C" windSpeed="20 km/h" windGust="25 km/h" windBearing="270°" precipIntensity="0" precipAccumulation="0"/>
+                <DailyData
+                    time="Fri, Feb 13"
+                    temperature="25°C"
+                    summary="Sunny"
+                    apparentTemperature="27°C"
+                    humidity="42%"
+                    dewPoint="3°C"
+                    windSpeed="20 km/h"
+                    windGust="25 km/h"
+                    windBearing="270°"
+                    precipIntensity="0"
+                    precipAccumulation="0"
+                />
+            </div>
+        </>
+    );
+}
+
+function RadarPage() {
+    return (
+        <>
+            <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
+                <Map />
             </div>
         </>
     );
@@ -143,7 +232,7 @@ function DailyPage() {
 
 export default function App() {
     let content: any;
-    const [pageType, setPageType] = useState<Pages>("Home");
+    const [pageType, setPageType] = useState<Pages>("Radar");
 
     if (pageType === "Home") content = <HomePage />;
     else if (pageType === "Currently") {
@@ -151,6 +240,7 @@ export default function App() {
     } else if (pageType === "Hourly") {
         content = <HourlyPage />;
     } else if (pageType === "Daily") content = <DailyPage />;
+    else if (pageType === "Radar") content = <RadarPage />;
 
     return (
         <>
@@ -166,11 +256,14 @@ export default function App() {
                 </div>
             </section>
             <section className="navbar">
-                <div className="fixed right-0 bottom-5 z-1000 flex w-full flex-1 justify-center md:top-20 md:left-5 md:w-48 md:justify-start">
-                    <Navbar setPageType={setPageType}/>
+                <div className="fixed right-0 bottom-5 z-10000 flex w-full flex-1 justify-center md:top-20 md:left-5 md:w-48 md:justify-start">
+                    <Navbar setPageType={setPageType} />
                 </div>
                 {content}
             </section>
+            <div className="m-4 mb-30">
+                <Footer/>
+            </div>
         </>
     );
 }

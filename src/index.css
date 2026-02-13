@@ -20,3 +20,16 @@
         background-color: rgba(218, 221, 231, 1);
     }
 }
+
+.leaflet-control {
+    background: rgba(0, 0, 0, 0.2) !important;
+    backdrop-filter: blur(20px) !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+.leaflet-control-zoom-in, .leaflet-control-zoom-out {
+    background: transparent !important;
+    color: #fff !important;
+    border: none !important;
+}
