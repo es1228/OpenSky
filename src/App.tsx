@@ -12,23 +12,27 @@ import DailyData from "./components/DailyData";
 import SavedLocation from "./components/SavedLocation";
 import Map from "./components/Map";
 
-type Pages = "Home" | "Currently" | "Hourly" | "Daily" | "Radar" | "Settings";
+type Page = "Home" | "Currently" | "Hourly" | "Daily" | "Radar" | "Settings";
 
-function Navbar({ setPageType }: { setPageType: (p: Pages) => void }) {
+type NavbarProps = {
+    handlePageChange: (p: Page) => void;
+};
+
+function Navbar({ handlePageChange }: NavbarProps) {
     return (
         <>
             <nav className="flex flex-col rounded-3xl bg-neutral-50/30 p-4 backdrop-blur md:pr-18 dark:bg-neutral-950/30">
                 <ul className="flex flex-1 flex-row justify-center gap-4 md:flex-col">
                     <li
                         className="flex flex-col items-center gap-2 md:flex-row"
-                        onClick={() => setPageType("Home")}
+                        onClick={() => handlePageChange("Home")}
                     >
                         <span className="material-symbols-rounded">home</span>
                         <p className="text-xs md:text-lg">Home</p>
                     </li>
                     <li
                         className="flex flex-col items-center gap-2 md:flex-row"
-                        onClick={() => setPageType("Currently")}
+                        onClick={() => handlePageChange("Currently")}
                     >
                         <span className="material-symbols-rounded">
                             schedule
@@ -37,7 +41,7 @@ function Navbar({ setPageType }: { setPageType: (p: Pages) => void }) {
                     </li>
                     <li
                         className="flex flex-col items-center gap-2 md:flex-row"
-                        onClick={() => setPageType("Hourly")}
+                        onClick={() => handlePageChange("Hourly")}
                     >
                         <span className="material-symbols-rounded">
                             calendar_clock
@@ -46,7 +50,7 @@ function Navbar({ setPageType }: { setPageType: (p: Pages) => void }) {
                     </li>
                     <li
                         className="flex flex-col items-center gap-2 md:flex-row"
-                        onClick={() => setPageType("Daily")}
+                        onClick={() => handlePageChange("Daily")}
                     >
                         <span className="material-symbols-rounded">
                             calendar_view_week
@@ -55,14 +59,14 @@ function Navbar({ setPageType }: { setPageType: (p: Pages) => void }) {
                     </li>
                     <li
                         className="flex flex-col items-center gap-2 md:flex-row"
-                        onClick={() => setPageType("Radar")}
+                        onClick={() => handlePageChange("Radar")}
                     >
                         <span className="material-symbols-rounded">radar</span>
                         <p className="text-xs md:text-lg">Radar</p>
                     </li>
                     <li
                         className="flex flex-col items-center gap-2 md:mt-auto md:flex-row"
-                        onClick={() => setPageType("Settings")}
+                        onClick={() => handlePageChange("Settings")}
                     >
                         <span className="material-symbols-rounded">
                             settings
@@ -232,7 +236,7 @@ function RadarPage() {
 
 export default function App() {
     let content: any;
-    const [pageType, setPageType] = useState<Pages>("Radar");
+    const [pageType, setPageType] = useState<Page>("Radar");
 
     if (pageType === "Home") content = <HomePage />;
     else if (pageType === "Currently") {
@@ -257,12 +261,12 @@ export default function App() {
             </section>
             <section className="navbar">
                 <div className="fixed right-0 bottom-5 z-10000 flex w-full flex-1 justify-center md:top-20 md:left-5 md:w-48 md:justify-start">
-                    <Navbar setPageType={setPageType} />
+                    <Navbar handlePageChange={(p: Page) => setPageType(p)} />
                 </div>
                 {content}
             </section>
-            <div className="m-4 mb-30">
-                <Footer/>
+            <div className="m-4 mb-30 md:mb-4">
+                <Footer />
             </div>
         </>
     );
