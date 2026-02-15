@@ -1,7 +1,7 @@
 export default function CurrentCard() {
     return (
         <>
-            <div className="flex w-full flex-col justify-between gap-4 rounded-3xl bg-neutral-50/30 p-4 backdrop-blur md:w-70 dark:bg-neutral-950/30">
+            <div className="flex w-full flex-col justify-between gap-4 rounded-3xl bg-neutral-400/20 p-4 backdrop-blur md:w-70 dark:bg-neutral-800/40">
                 <h1 className="text-lg font-bold">Current Conditions</h1>
                 <h1 className="text-5xl">27°C</h1>
                 <p>Sunny</p>

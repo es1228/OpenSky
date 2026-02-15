@@ -21,7 +21,7 @@ type NavbarProps = {
 function Navbar({ handlePageChange }: NavbarProps) {
     return (
         <>
-            <nav className="flex flex-col rounded-3xl bg-neutral-50/30 p-4 backdrop-blur md:pr-18 dark:bg-neutral-950/30">
+            <nav className="flex flex-col rounded-3xl bg-neutral-400/20 p-4 backdrop-blur md:pr-18 dark:bg-neutral-800/40">
                 <ul className="flex flex-1 flex-row justify-center gap-4 md:flex-col">
                     <li
                         className="flex flex-col items-center gap-2 md:flex-row"
@@ -98,7 +98,7 @@ function CurrentlyPage() {
         <>
             <div className="mx-4 mt-20 flex flex-row flex-wrap justify-center gap-5 md:ml-60">
                 <CurrentCard />
-                <div className="flex w-240 flex-col flex-wrap gap-2 rounded-3xl bg-neutral-50/30 p-4 backdrop-blur dark:bg-neutral-950/30">
+                <div className="flex w-240 flex-col flex-wrap gap-2 rounded-3xl bg-neutral-400/20 p-4 dark:bg-neutral-800/40">
                     <h1 className="text-lg font-bold">Highlights</h1>
                     <div className="flex flex-row flex-wrap gap-4">
                         <InfoCard
@@ -208,9 +208,9 @@ function DailyPage() {
             <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
                 <DailyData
                     time="Fri, Feb 13"
-                    temperature="25°C"
                     summary="Sunny"
-                    apparentTemperature="27°C"
+                    temperatureMax="27°C"
+                    temperatureMin="21°C"
                     humidity="42%"
                     dewPoint="3°C"
                     windSpeed="20 km/h"
@@ -218,6 +218,10 @@ function DailyPage() {
                     windBearing="270°"
                     precipIntensity="0"
                     precipAccumulation="0"
+                    cloudCover="10%"
+                    pressure="1013 kPa"
+                    uv="5"
+                    visibility="20.00"
                 />
             </div>
         </>
@@ -234,17 +238,111 @@ function RadarPage() {
     );
 }
 
+function SettingsPage() {
+    return (
+        <>
+            <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-3xl">Theme</h1>
+                    <fieldset className="rounded-3xl bg-neutral-50/30 p-4 dark:bg-neutral-800/40">
+                        <div>
+                            <div className="flex flex-row items-center gap-2">
+                                <input
+                                    type="radio"
+                                    name="theme"
+                                    id="light"
+                                    value={"light"}
+                                />
+                                <label htmlFor="light">Light</label>
+                            </div>
+                            <div className="flex flex-row items-center gap-2">
+                                <input
+                                    type="radio"
+                                    name="theme"
+                                    id="dark"
+                                    value={"dark"}
+                                />
+                                <label htmlFor="dark">Dark</label>
+                            </div>
+                            <div className="flex flex-row items-center gap-2">
+                                <input
+                                    type="radio"
+                                    name="theme"
+                                    id="system"
+                                    value={"system"}
+                                    defaultChecked={true}
+                                />
+                                <label htmlFor="system">System</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-3xl">Units</h1>
+                    <fieldset className="rounded-3xl bg-neutral-50/30 p-4 dark:bg-neutral-800/40">
+                        <div className="flex flex-row items-center gap-2">
+                            <input
+                                type="radio"
+                                name="units"
+                                id="ca"
+                                value={"ca"}
+                            />
+                            <label htmlFor="ca">CA (SI + km/h)</label>
+                        </div>
+                        <div className="flex flex-row items-center gap-2">
+                            <input
+                                type="radio"
+                                name="units"
+                                id="ul"
+                                value={"uk"}
+                            />
+                            <label htmlFor="uk">UK (SI + mph)</label>
+                        </div>
+                        <div className="flex flex-row items-center gap-2">
+                            <input
+                                type="radio"
+                                name="units"
+                                id="us"
+                                value={"us"}
+                            />
+                            <label htmlFor="us">US (Imperial)</label>
+                        </div>
+                        <div className="flex flex-row items-center gap-2">
+                            <input
+                                type="radio"
+                                name="units"
+                                id="si"
+                                value={"si"}
+                            />
+                            <label htmlFor="si">SI</label>
+                        </div>
+                        <div className="flex flex-row items-center gap-2">
+                            <input
+                                type="radio"
+                                name="units"
+                                id="auto"
+                                value={"auto"}
+                                defaultChecked={true}
+                            />
+                            <label htmlFor="auto">Auto</label>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </>
+    );
+}
+
 export default function App() {
     let content: any;
     const [pageType, setPageType] = useState<Page>("Radar");
 
     if (pageType === "Home") content = <HomePage />;
-    else if (pageType === "Currently") {
-        content = <CurrentlyPage />;
-    } else if (pageType === "Hourly") {
-        content = <HourlyPage />;
-    } else if (pageType === "Daily") content = <DailyPage />;
+    else if (pageType === "Currently") content = <CurrentlyPage />;
+    else if (pageType === "Hourly") content = <HourlyPage />;
+    else if (pageType === "Daily") content = <DailyPage />;
     else if (pageType === "Radar") content = <RadarPage />;
+    else if (pageType === "Settings") content = <SettingsPage />;
 
     return (
         <>

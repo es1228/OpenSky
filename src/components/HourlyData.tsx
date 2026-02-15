@@ -12,41 +12,41 @@ type HourlyDataProps = {
     precipAccumulation: string;
 };
 
-export default function HourlyData(props: HourlyDataProps) {
+export default function HourlyData({time, temperature, summary, apparentTemperature, humidity, dewPoint, windSpeed, windGust, windBearing, precipIntensity, precipAccumulation}: HourlyDataProps) {
     return (
         <>
-            <div className="flex w-full flex-col gap-2 rounded-3xl bg-neutral-50/30 p-4 backdrop-blur dark:bg-neutral-950/30">
-                <h1>{props.time}</h1>
+            <div className="flex w-full flex-col gap-2 rounded-3xl bg-neutral-400/20 p-4 backdrop-blur dark:bg-neutral-800/40">
+                <h1>{time}</h1>
                 <div className="flex flex-col gap-4 md:flex-row md:items-center">
                     <div>
-                        <h1 className="text-4xl">{props.temperature}</h1>
-                        <p>{props.summary}</p>
-                        <p>Feels: {props.apparentTemperature}</p>
+                        <h1 className="text-4xl">{temperature}</h1>
+                        <p>{summary}</p>
+                        <p>Feels: {apparentTemperature}</p>
                     </div>
                     <div className="ml-auto flex flex-row flex-wrap gap-4">
                         <div>
                             <p className="text-nowrap">
-                                Humidity: {props.humidity}
+                                Humidity: {humidity}
                             </p>
                             <p className="text-nowrap">
-                                Dew Point: {props.dewPoint}
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-nowrap">
-                                Wind Speed: {props.windSpeed}{" "}
-                                {props.windBearing}
-                            </p>
-                            <p className="text-nowrap">
-                                Wind Gust: {props.windGust}
+                                Dew Point: {dewPoint}
                             </p>
                         </div>
                         <div>
                             <p className="text-nowrap">
-                                Precip Intensity: {props.precipIntensity}
+                                Wind Speed: {windSpeed}{" "}
+                                {windBearing}
                             </p>
                             <p className="text-nowrap">
-                                Precip Accumulation: {props.precipAccumulation}
+                                Wind Gust: {windGust}
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-nowrap">
+                                Precip Intensity: {precipIntensity}
+                            </p>
+                            <p className="text-nowrap">
+                                Precip Accumulation: {precipAccumulation}
                             </p>
                         </div>
                     </div>

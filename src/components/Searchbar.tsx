@@ -8,7 +8,7 @@ export default function Searchbar() {
                 <input
                     type="text"
                     placeholder="Enter a city..."
-                    className="rounded-3xl bg-neutral-50/30 p-3 pl-11 outline-0 md:min-w-sm dark:bg-neutral-950/30 backdrop-blur"
+                    className="rounded-3xl bg-neutral-400/20 p-3 pl-11 outline-0 md:min-w-sm dark:bg-neutral-800/40 backdrop-blur"
                     id="search"
                 />
             </div>
