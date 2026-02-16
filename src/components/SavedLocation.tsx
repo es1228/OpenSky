@@ -1,10 +1,14 @@
 type SavedLocationProps = {
     city: string;
     summary: string;
-    temperature: string
-}
+    temperature: string;
+};
 
-export default function SavedLocation({city, summary, temperature}: SavedLocationProps) {
+export default function SavedLocation({
+    city,
+    summary,
+    temperature,
+}: SavedLocationProps) {
     return (
         <>
             <div className="flex w-full flex-col gap-2 rounded-3xl bg-neutral-400/20 p-4 backdrop-blur dark:bg-neutral-800/40">
@@ -13,7 +17,7 @@ export default function SavedLocation({city, summary, temperature}: SavedLocatio
                         <h1 className="text-3xl">{city}</h1>
                         <p>{summary}</p>
                     </div>
-                    <div className="ml-auto flex flex-row gap-4 flex-wrap">
+                    <div className="ml-auto flex flex-row flex-wrap gap-4">
                         <h1 className="text-5xl">{temperature}</h1>
                     </div>
                 </div>

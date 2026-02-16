@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 import Logo from "./components/Logo";
@@ -11,6 +11,40 @@ import HourlyData from "./components/HourlyData";
 import DailyData from "./components/DailyData";
 import SavedLocation from "./components/SavedLocation";
 import Map from "./components/Map";
+
+type weatherDataResponseParameters = {
+    currently: {
+        time: number;
+        summary: string;
+        icon: string;
+        nearestStormDistance: number;
+        nearestStormBearing: number;
+        precipIntensity: number;
+        precipProbability: number;
+        precipIntensityError: number;
+        precipType: string;
+        temperature: number;
+        apparentTemperature: number;
+        dewPoint: number;
+        humidity: number;
+        pressure: number;
+        windSpeed: number;
+        windGust: number;
+        windBearing: number;
+        cloudCover: number;
+        currentDayLiquid: number;
+        currentDaySnow: number;
+        currentDayIce: number;
+        cape: number;
+        uvIndex: number;
+        visibility: number;
+        ozone: number;
+    };
+    flags: {
+        nearestCity: string;
+        nearestCountry: string;
+    };
+};
 
 type Page = "Home" | "Currently" | "Hourly" | "Daily" | "Radar" | "Settings";
 
@@ -93,25 +127,35 @@ function HomePage() {
     );
 }
 
-function CurrentlyPage() {
+type CurrentlyPageProps = {
+    weatherData: weatherDataResponseParameters | null;
+};
+
+function CurrentlyPage({ weatherData }: CurrentlyPageProps) {
+    if (!weatherData) return;
     return (
         <>
             <div className="mx-4 mt-20 flex flex-row flex-wrap justify-center gap-5 md:ml-60">
-                <CurrentCard />
+                <CurrentCard
+                    temperature={`${Math.round(weatherData.currently.temperature)}°C`}
+                    summary={weatherData.currently.summary}
+                    date={new Date().toLocaleDateString()}
+                    location={`${weatherData.flags.nearestCity}, ${weatherData.flags.nearestCountry}`}
+                />
                 <div className="flex w-240 flex-col flex-wrap gap-2 rounded-3xl bg-neutral-400/20 p-4 dark:bg-neutral-800/40">
                     <h1 className="text-lg font-bold">Highlights</h1>
                     <div className="flex flex-row flex-wrap gap-4">
                         <InfoCard
                             title="Wind"
                             icon="air"
-                            summary="25 km/h NE"
-                            other="Gust: 30km/h"
+                            summary={`${Math.round(weatherData.currently.windSpeed)} km/h @ ${weatherData.currently.windBearing}°`}
+                            other={`Gust: ${Math.round(weatherData.currently.windGust)} km/h @ ${weatherData.currently.windBearing}°`}
                         />
                         <InfoCard
                             title="UV"
                             icon="wb_sunny"
-                            summary="5"
-                            other="Moderate"
+                            summary={`${weatherData.currently.uvIndex}`}
+                            other="Low"
                         />
                         <InfoCard
                             title="Sun & Moon"
@@ -122,57 +166,57 @@ function CurrentlyPage() {
                         <InfoCard
                             title="Humidity"
                             icon="humidity_percentage"
-                            summary="42%"
-                            other="Dew Point: 3°C"
+                            summary={`${weatherData.currently.humidity * 100}%`}
+                            other={`Dew Point: ${Math.round(weatherData.currently.dewPoint)}°C`}
                         />
                         <InfoCard
                             title="Visibility"
                             icon="visibility"
-                            summary="16.00 km"
+                            summary={`${Math.round(weatherData.currently.visibility)} km`}
                             other="Unlimited"
                         />
                         <InfoCard
                             title="Feels Like"
                             icon="thermostat"
-                            summary="28°C"
-                            other="1° Warmer"
+                            summary={`${Math.round(weatherData.currently.apparentTemperature)}°C`}
+                            other={`${Math.round(weatherData.currently.apparentTemperature - weatherData.currently.temperature)} From Actual`}
                         />
                     </div>
                 </div>
                 <InfoCard
                     title="Pressure"
                     icon="speed"
-                    summary="100 kPa"
+                    summary={`${Math.round(weatherData.currently.pressure)} kPa`}
                     other="Steady"
                 />
                 <InfoCard
                     title="Cloud Cover"
                     icon="cloud"
-                    summary="8%"
-                    other="Sunny"
+                    summary={`${weatherData.currently.cloudCover * 100}%`}
+                    other="High"
                 />
                 <InfoCard
                     title="Rain Accumulation"
                     icon="rainy"
-                    summary="0 mm"
+                    summary={`${Math.round(weatherData.currently.currentDayLiquid)} mm`}
                     other="No Rain Expected Today"
                 />
                 <InfoCard
                     title="Snow Accumulation"
                     icon="weather_snowy"
-                    summary="0 mm"
+                    summary={`${Math.round(weatherData.currently.currentDaySnow)} mm`}
                     other="No Snow Expected Today"
                 />
                 <InfoCard
                     title="Ice Accumulation"
                     icon="weather_hail"
-                    summary="0 mm"
+                    summary={`${Math.round(weatherData.currently.currentDayIce)} mm`}
                     other="No Ice Expected Today"
                 />
                 <InfoCard
                     title="CAPE"
                     icon="thunderstorm"
-                    summary="0"
+                    summary={`${Math.round(weatherData.currently.cape)}`}
                     other="No Thunderstorms Expected Today"
                 />
             </div>
@@ -335,10 +379,31 @@ function SettingsPage() {
 
 export default function App() {
     let content: any;
-    const [pageType, setPageType] = useState<Page>("Radar");
+    const [pageType, setPageType] = useState<Page>("Currently");
+    const [weatherData, setWeatherData] =
+        useState<weatherDataResponseParameters | null>(null);
+
+    useEffect(() => {
+        const fetchWeather = async (
+            lat: number,
+            long: number,
+            units: string,
+        ) => {
+            try {
+                const response = await fetch(
+                    `https://pw-bridge.vercel.app/api/weather?lat=${lat}&long=${long}&units=${units}`,
+                );
+                const weatherDataResponse = await response.json();
+                setWeatherData(weatherDataResponse);
+                console.log(weatherDataResponse);
+            } catch {}
+        };
+        fetchWeather(43.6532, -79.3832, "ca");
+    }, []);
 
     if (pageType === "Home") content = <HomePage />;
-    else if (pageType === "Currently") content = <CurrentlyPage />;
+    else if (pageType === "Currently")
+        content = <CurrentlyPage weatherData={weatherData} />;
     else if (pageType === "Hourly") content = <HourlyPage />;
     else if (pageType === "Daily") content = <DailyPage />;
     else if (pageType === "Radar") content = <RadarPage />;

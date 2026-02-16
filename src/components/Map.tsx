@@ -13,7 +13,7 @@ type TimeSliderProps = {
 function TimeSlider({ handleChange, value, max, label }: TimeSliderProps) {
     return (
         <>
-            <div className="absolute mt-2 right-6 md:bottom-10 z-10000 ml-2 rounded-3xl bg-neutral-50/30 p-4 backdrop-blur dark:bg-neutral-950/30">
+            <div className="absolute right-6 z-10000 mt-2 ml-2 rounded-3xl bg-neutral-50/30 p-4 backdrop-blur md:bottom-10 dark:bg-neutral-950/30">
                 <p>Time</p>
                 <input
                     type="range"
@@ -31,13 +31,28 @@ function TimeSlider({ handleChange, value, max, label }: TimeSliderProps) {
 function Legend() {
     return (
         <>
-            <div className="absolute bottom-30 md:bottom-40 right-6 z-10000 ml-2 rounded-3xl bg-neutral-50/30 p-4 backdrop-blur dark:bg-neutral-950/30">
+            <div className="absolute right-6 bottom-30 z-10000 ml-2 rounded-3xl bg-neutral-50/30 p-4 backdrop-blur md:bottom-40 dark:bg-neutral-950/30">
                 <p>Legend</p>
-                <div className="flex items-center gap-2"><span className="bg-green-300 rounded-full w-4 h-4 inline-block"></span>Rain</div>
-                <div className="flex items-center gap-2"><span className="bg-blue-300 rounded-full w-4 h-4 inline-block"></span>Snow</div>
-                <div className="flex items-center gap-2"><span className="bg-purple-300 rounded-full w-4 h-4 inline-block"></span>Mixed</div>
-                <div className="flex items-center gap-2"><span className="bg-yellow-300 rounded-full w-4 h-4 inline-block"></span>Hail/Rain</div>
-                <div className="flex items-center gap-2"><span className="bg-red-300 rounded-full w-4 h-4 inline-block"></span>Frz Rain</div>
+                <div className="flex items-center gap-2">
+                    <span className="inline-block h-4 w-4 rounded-full bg-green-300"></span>
+                    Rain
+                </div>
+                <div className="flex items-center gap-2">
+                    <span className="inline-block h-4 w-4 rounded-full bg-blue-300"></span>
+                    Snow
+                </div>
+                <div className="flex items-center gap-2">
+                    <span className="inline-block h-4 w-4 rounded-full bg-purple-300"></span>
+                    Mixed
+                </div>
+                <div className="flex items-center gap-2">
+                    <span className="inline-block h-4 w-4 rounded-full bg-yellow-300"></span>
+                    Hail/Rain
+                </div>
+                <div className="flex items-center gap-2">
+                    <span className="inline-block h-4 w-4 rounded-full bg-red-300"></span>
+                    Frz Rain
+                </div>
             </div>
         </>
     );
@@ -119,7 +134,7 @@ export default function Map() {
                 label={new Date(activeTime).toLocaleString()}
                 handleChange={handleSliderChange}
             />
-            <Legend/>
+            <Legend />
         </>
     );
 }

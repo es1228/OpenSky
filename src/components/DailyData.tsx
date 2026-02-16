@@ -16,7 +16,23 @@ type DailyDataProps = {
     visibility: string;
 };
 
-export default function DailyData({time, summary, temperatureMax, temperatureMin, humidity, dewPoint, windSpeed, windGust, windBearing, precipIntensity, precipAccumulation, cloudCover, pressure, uv, visibility}: DailyDataProps) {
+export default function DailyData({
+    time,
+    summary,
+    temperatureMax,
+    temperatureMin,
+    humidity,
+    dewPoint,
+    windSpeed,
+    windGust,
+    windBearing,
+    precipIntensity,
+    precipAccumulation,
+    cloudCover,
+    pressure,
+    uv,
+    visibility,
+}: DailyDataProps) {
     return (
         <>
             <div className="flex w-full flex-col gap-2 rounded-3xl bg-neutral-400/20 p-4 backdrop-blur dark:bg-neutral-800/40">
@@ -39,8 +55,7 @@ export default function DailyData({time, summary, temperatureMax, temperatureMin
                             </div>
                             <div>
                                 <p className="text-nowrap">
-                                    Wind Speed: {windSpeed}{" "}
-                                    {windBearing}
+                                    Wind Speed: {windSpeed} {windBearing}
                                 </p>
                                 <p className="text-nowrap">
                                     Wind Gust: {windGust}
@@ -51,8 +66,7 @@ export default function DailyData({time, summary, temperatureMax, temperatureMin
                                     Precip Intensity: {precipIntensity}
                                 </p>
                                 <p className="text-nowrap">
-                                    Precip Accumulation:{" "}
-                                    {precipAccumulation}
+                                    Precip Accumulation: {precipAccumulation}
                                 </p>
                             </div>
                         </div>

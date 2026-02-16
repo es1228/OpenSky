@@ -12,7 +12,19 @@ type HourlyDataProps = {
     precipAccumulation: string;
 };
 
-export default function HourlyData({time, temperature, summary, apparentTemperature, humidity, dewPoint, windSpeed, windGust, windBearing, precipIntensity, precipAccumulation}: HourlyDataProps) {
+export default function HourlyData({
+    time,
+    temperature,
+    summary,
+    apparentTemperature,
+    humidity,
+    dewPoint,
+    windSpeed,
+    windGust,
+    windBearing,
+    precipIntensity,
+    precipAccumulation,
+}: HourlyDataProps) {
     return (
         <>
             <div className="flex w-full flex-col gap-2 rounded-3xl bg-neutral-400/20 p-4 backdrop-blur dark:bg-neutral-800/40">
@@ -25,21 +37,14 @@ export default function HourlyData({time, temperature, summary, apparentTemperat
                     </div>
                     <div className="ml-auto flex flex-row flex-wrap gap-4">
                         <div>
-                            <p className="text-nowrap">
-                                Humidity: {humidity}
-                            </p>
-                            <p className="text-nowrap">
-                                Dew Point: {dewPoint}
-                            </p>
+                            <p className="text-nowrap">Humidity: {humidity}</p>
+                            <p className="text-nowrap">Dew Point: {dewPoint}</p>
                         </div>
                         <div>
                             <p className="text-nowrap">
-                                Wind Speed: {windSpeed}{" "}
-                                {windBearing}
+                                Wind Speed: {windSpeed} {windBearing}
                             </p>
-                            <p className="text-nowrap">
-                                Wind Gust: {windGust}
-                            </p>
+                            <p className="text-nowrap">Wind Gust: {windGust}</p>
                         </div>
                         <div>
                             <p className="text-nowrap">
