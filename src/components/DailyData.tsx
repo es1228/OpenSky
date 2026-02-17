@@ -58,7 +58,7 @@ export default function DailyData({
                                     Wind Speed: {windSpeed} {windBearing}
                                 </p>
                                 <p className="text-nowrap">
-                                    Wind Gust: {windGust}
+                                    Wind Gust: {windGust} {windBearing}
                                 </p>
                             </div>
                             <div>
