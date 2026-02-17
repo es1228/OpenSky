@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import "./App.css";
 
 import Logo from "./components/Logo";
-import Footer from "./components/Footer";
 import Searchbar from "./components/Searchbar";
 import LocationButton from "./components/LocationButton";
 import CurrentCard from "./components/CurrentCard";
@@ -13,37 +12,155 @@ import SavedLocation from "./components/SavedLocation";
 import Map from "./components/Map";
 
 type weatherDataResponseParameters = {
+    alerts: [];
     currently: {
-        time: number;
-        summary: string;
-        icon: string;
-        nearestStormDistance: number;
-        nearestStormBearing: number;
-        precipIntensity: number;
-        precipProbability: number;
-        precipIntensityError: number;
-        precipType: string;
-        temperature: number;
         apparentTemperature: number;
-        dewPoint: number;
-        humidity: number;
-        pressure: number;
-        windSpeed: number;
-        windGust: number;
-        windBearing: number;
+        cape: number;
         cloudCover: number;
+        currentDayIce: number;
         currentDayLiquid: number;
         currentDaySnow: number;
-        currentDayIce: number;
-        cape: number;
+        dewPoint: number;
+        feelsLike: number;
+        fireIndex: number;
+        humidity: number;
+        iceIntensity: number;
+        icon: string;
+        nearestStormBearing: number;
+        nearestStormDistance: number;
+        ozone: number;
+        precipIntensity: number;
+        precipIntensityError: number;
+        precipProbability: number;
+        precipType: string;
+        pressure: number;
+        rainIntensity: number;
+        smoke: number;
+        snowIntensity: number;
+        solar: number;
+        summary: string;
+        temperature: number;
+        time: number;
         uvIndex: number;
         visibility: number;
-        ozone: number;
+        windBearing: number;
+        windGust: number;
+        windSpeed: number;
     };
+    daily: {
+        data: Array<{
+            apparentTemperatureHigh: number;
+            apparentTemperatureHighTime: number;
+            apparentTemperatureLow: number;
+            apparentTemperatureLowTime: number;
+            apparentTemperatureMax: number;
+            apparentTemperatureMaxTime: number;
+            apparentTemperatureMin: number;
+            apparentTemperatureMinTime: number;
+            capeMax: number;
+            capeMaxTime: number;
+            cloudCover: number;
+            dawnTime: number;
+            dewPoint: number;
+            duskTime: number;
+            fireIndexMax: number;
+            fireIndexMaxTime: number;
+            humidity: number;
+            iceAccumulation: number;
+            iceIntensity: number;
+            iceIntensityMax: number;
+            icon: string;
+            liquidAccumulation: number;
+            moonPhase: number;
+            precipAccumulation: number;
+            precipIntensity: number;
+            precipIntensityMax: number;
+            precipIntensityMaxTime: number;
+            precipProbability: number;
+            precipType: string;
+            pressure: number;
+            rainIntensity: number;
+            rainIntensityMax: number;
+            smokeMax: number;
+            smokeMaxTime: number;
+            snowAccumulation: number;
+            snowIntensity: number;
+            snowIntensityMax: number;
+            solarMax: number;
+            solarMaxTime: number;
+            summary: string;
+            sunriseTime: number;
+            sunsetTime: number;
+            temperatureHigh: number;
+            temperatureHighTime: number;
+            temperatureLow: number;
+            temperatureLowTime: number;
+            temperatureMax: number;
+            temperatureMaxTime: number;
+            temperatureMin: number;
+            temperatureMinTime: number;
+            time: number;
+            uvIndex: number;
+            uvIndexTime: number;
+            visibility: number;
+            windBearing: number;
+            windGust: number;
+            windGustTime: number;
+            windSpeed: number;
+        }>;
+        icon: string;
+        summary: string;
+    };
+    elevation: number;
     flags: {
         nearestCity: string;
         nearestCountry: string;
+        nearestSubNational: string;
+        version: number;
     };
+    hourly: {
+        data: Array<{
+            apparentTemperature: number;
+            cape: number;
+            cloudCover: number;
+            dewPoint: number;
+            feelsLike: number;
+            fireIndex: number;
+            humidity: number;
+            iceAccumulation: number;
+            iceIntensity: number;
+            icon: string;
+            liquidAccumulation: number;
+            nearestStormBearing: number;
+            nearestStormDistance: number;
+            ozone: number;
+            precipAccumulation: number;
+            precipIntensity: number;
+            precipIntensityError: number;
+            precipProbability: number;
+            precipType: string;
+            pressure: number;
+            rainIntensity: number;
+            smoke: number;
+            snowAccumulation: number;
+            snowIntensity: number;
+            solar: number;
+            summary: string;
+            temperature: number;
+            time: number;
+            uvIndex: number;
+            visibility: number;
+            windBearing: number;
+            windGust: number;
+            windSpeed: number;
+        }>;
+        icon: string;
+        summary: string;
+    };
+    latitude: number;
+    longitude: number;
+    offset: number;
+    timezone: string;
 };
 
 type Page = "Home" | "Currently" | "Hourly" | "Daily" | "Radar" | "Settings";
@@ -117,156 +234,160 @@ function HomePage() {
     return (
         <>
             <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
+                <h1 className="text-3xl">Saved Locations</h1>
                 <SavedLocation
-                    city="Miami"
-                    summary="Clear"
-                    temperature="21°C"
+                    city="Toronto"
+                    summary="Overcast"
+                    temperature="0°C"
                 />
             </div>
         </>
     );
 }
 
-type CurrentlyPageProps = {
+type WeatherPageProps = {
     weatherData: weatherDataResponseParameters | null;
+    units: string[];
 };
 
-function CurrentlyPage({ weatherData }: CurrentlyPageProps) {
+function CurrentlyPage({ weatherData, units }: WeatherPageProps) {
     if (!weatherData) return;
     return (
         <>
             <div className="mx-4 mt-20 flex flex-row flex-wrap justify-center gap-5 md:ml-60">
                 <CurrentCard
-                    temperature={`${Math.round(weatherData.currently.temperature)}°C`}
+                    temperature={`${Math.round(weatherData.currently.temperature)}${units[2]}`}
                     summary={weatherData.currently.summary}
-                    date={new Date().toLocaleDateString()}
+                    date={new Date(
+                        weatherData.currently.time * 1000,
+                    ).toLocaleDateString()}
                     location={`${weatherData.flags.nearestCity}, ${weatherData.flags.nearestCountry}`}
                 />
                 <div className="flex w-240 flex-col flex-wrap gap-2 rounded-3xl bg-neutral-400/20 p-4 dark:bg-neutral-800/40">
                     <h1 className="text-lg font-bold">Highlights</h1>
-                    <div className="flex flex-row flex-wrap gap-4">
+                    <div className="flex flex-row flex-wrap gap-3">
                         <InfoCard
                             title="Wind"
                             icon="air"
-                            summary={`${Math.round(weatherData.currently.windSpeed)} km/h @ ${weatherData.currently.windBearing}°`}
-                            other={`Gust: ${Math.round(weatherData.currently.windGust)} km/h @ ${weatherData.currently.windBearing}°`}
+                            summary={`${Math.round(weatherData.currently.windSpeed)} ${units[3]} @ ${weatherData.currently.windBearing}°`}
+                            other={`Gust: ${Math.round(weatherData.currently.windGust)} ${units[3]} @ ${weatherData.currently.windBearing}°`}
                         />
                         <InfoCard
                             title="UV"
                             icon="wb_sunny"
-                            summary={`${weatherData.currently.uvIndex}`}
+                            summary={`${Math.round(weatherData.currently.uvIndex)}`}
                             other="Low"
                         />
                         <InfoCard
-                            title="Sun & Moon"
-                            icon="wb_twilight"
-                            summary="6:43AM - 5:30PM"
-                            other="Moon: Waning Gibbous"
+                            title="Cloud Cover"
+                            icon="cloud"
+                            summary={`${Math.round(weatherData.currently.cloudCover * 100)}%`}
+                            other="High"
                         />
                         <InfoCard
                             title="Humidity"
                             icon="humidity_percentage"
-                            summary={`${weatherData.currently.humidity * 100}%`}
-                            other={`Dew Point: ${Math.round(weatherData.currently.dewPoint)}°C`}
+                            summary={`${Math.round(weatherData.currently.humidity * 100)}%`}
+                            other={`Dew Point: ${Math.round(weatherData.currently.dewPoint)}${units[2]}`}
                         />
                         <InfoCard
                             title="Visibility"
                             icon="visibility"
-                            summary={`${Math.round(weatherData.currently.visibility)} km`}
+                            summary={`${Math.round(weatherData.currently.visibility)} ${units[5]}`}
                             other="Unlimited"
                         />
                         <InfoCard
                             title="Feels Like"
                             icon="thermostat"
-                            summary={`${Math.round(weatherData.currently.apparentTemperature)}°C`}
-                            other={`${Math.round(weatherData.currently.apparentTemperature - weatherData.currently.temperature)} From Actual`}
+                            summary={`${Math.round(weatherData.currently.apparentTemperature)}${units[2]}`}
+                            other={`${Math.round(weatherData.currently.apparentTemperature) - Math.round(weatherData.currently.temperature)} From Actual`}
                         />
                     </div>
                 </div>
                 <InfoCard
                     title="Pressure"
                     icon="speed"
-                    summary={`${Math.round(weatherData.currently.pressure)} kPa`}
+                    summary={`${Math.round(weatherData.currently.pressure)} ${units[4]}`}
                     other="Steady"
-                />
-                <InfoCard
-                    title="Cloud Cover"
-                    icon="cloud"
-                    summary={`${weatherData.currently.cloudCover * 100}%`}
-                    other="High"
                 />
                 <InfoCard
                     title="Rain Accumulation"
                     icon="rainy"
-                    summary={`${Math.round(weatherData.currently.currentDayLiquid)} mm`}
-                    other="No Rain Expected Today"
+                    summary={`${Math.round(weatherData.currently.currentDayLiquid)} ${units[1]}`}
+                    other={`${Math.max(0, Math.round(weatherData.daily.data[0].liquidAccumulation) - Math.round(weatherData.currently.currentDayLiquid))} ${units[1]} More Expected`}
                 />
                 <InfoCard
                     title="Snow Accumulation"
                     icon="weather_snowy"
-                    summary={`${Math.round(weatherData.currently.currentDaySnow)} mm`}
-                    other="No Snow Expected Today"
+                    summary={`${Math.round(weatherData.currently.currentDaySnow)} ${units[1]}`}
+                    other={`${Math.max(0, Math.round(weatherData.daily.data[0].snowAccumulation) - Math.round(weatherData.currently.currentDaySnow))} ${units[1]} More Expected`}
                 />
                 <InfoCard
                     title="Ice Accumulation"
                     icon="weather_hail"
-                    summary={`${Math.round(weatherData.currently.currentDayIce)} mm`}
-                    other="No Ice Expected Today"
-                />
-                <InfoCard
-                    title="CAPE"
-                    icon="thunderstorm"
-                    summary={`${Math.round(weatherData.currently.cape)}`}
-                    other="No Thunderstorms Expected Today"
+                    summary={`${Math.round(weatherData.currently.currentDayIce)} ${units[1]}`}
+                    other={`${Math.max(0, Math.round(weatherData.daily.data[0].iceAccumulation) - Math.round(weatherData.currently.currentDayIce))} ${units[1]} More Expected`}
                 />
             </div>
         </>
     );
 }
 
-function HourlyPage() {
+function HourlyPage({ weatherData }: WeatherPageProps) {
+    if (!weatherData) return;
+    const hourlyItems = weatherData.hourly.data.map((hour) => (
+        <HourlyData
+            key={hour.time}
+            time={`${new Date(hour.time * 1000).toLocaleString()}`}
+            temperature={`${Math.round(hour.temperature)}°C`}
+            summary={`${hour.summary}`}
+            apparentTemperature={`${Math.round(hour.apparentTemperature)}°C`}
+            humidity={`${Math.round(hour.humidity * 100)}%`}
+            dewPoint={`${Math.round(hour.dewPoint)}°C`}
+            windSpeed={`${Math.round(hour.windSpeed)} km/h`}
+            windGust={`${Math.round(hour.windGust)} km/h`}
+            windBearing={`${Math.round(hour.windBearing)}°`}
+            precipIntensity={`${hour.precipIntensity.toFixed(2)} mm/h`}
+            precipAccumulation={`${hour.precipAccumulation.toFixed(2)} cm`}
+        />
+    ));
     return (
         <>
             <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
-                <HourlyData
-                    time="10 PM"
-                    temperature="25°C"
-                    summary="Sunny"
-                    apparentTemperature="27°C"
-                    humidity="42%"
-                    dewPoint="3°C"
-                    windSpeed="20 km/h"
-                    windGust="25 km/h"
-                    windBearing="270°"
-                    precipIntensity="0"
-                    precipAccumulation="0"
-                />
+                <h1 className="text-3xl">Hourly</h1>
+                {hourlyItems}
             </div>
         </>
     );
 }
 
-function DailyPage() {
+function DailyPage({ weatherData }: WeatherPageProps) {
+    if (!weatherData) return;
+    const dailyItems = weatherData.daily.data.map((day) => (
+        <DailyData
+            key={day.time}
+            time={`${new Date(day.time * 1000).toDateString()}`}
+            temperatureMax={`${Math.round(day.temperatureMax)}°C`}
+            temperatureMin={`${Math.round(day.temperatureMin)}°C`}
+            summary={`${day.summary}`}
+            humidity={`${Math.round(day.humidity * 100)}%`}
+            dewPoint={`${Math.round(day.dewPoint)}°C`}
+            windSpeed={`${Math.round(day.windSpeed)} km/h`}
+            windGust={`${Math.round(day.windGust)} km/h`}
+            windBearing={`${Math.round(day.windBearing)}°`}
+            precipIntensity={`${day.precipIntensity.toFixed(2)} mm/h`}
+            precipAccumulation={`${day.precipAccumulation.toFixed(2)} cm`}
+            cloudCover={`${Math.round(day.cloudCover * 100)}%`}
+            pressure={`${Math.round(day.pressure)} kPa`}
+            uvIndex={`${Math.round(day.uvIndex)}`}
+            visibility={`${Math.round(day.visibility)} km`}
+        />
+    ));
     return (
         <>
             <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
-                <DailyData
-                    time="Fri, Feb 13"
-                    summary="Sunny"
-                    temperatureMax="27°C"
-                    temperatureMin="21°C"
-                    humidity="42%"
-                    dewPoint="3°C"
-                    windSpeed="20 km/h"
-                    windGust="25 km/h"
-                    windBearing="270°"
-                    precipIntensity="0"
-                    precipAccumulation="0"
-                    cloudCover="10%"
-                    pressure="1013 kPa"
-                    uv="5"
-                    visibility="20.00"
-                />
+                <h1 className="text-3xl">Daily</h1>
+                {dailyItems}
             </div>
         </>
     );
@@ -282,13 +403,19 @@ function RadarPage() {
     );
 }
 
-function SettingsPage() {
+type SettingsPageProps = {
+    handleUnitChange: (e: ChangeEvent<HTMLInputElement>) => void;
+};
+
+function SettingsPage({ handleUnitChange }: SettingsPageProps) {
     return (
         <>
             <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
                 <div className="flex flex-col gap-2">
                     <h1 className="text-3xl">Theme</h1>
-                    <fieldset className="rounded-3xl bg-neutral-50/30 p-4 dark:bg-neutral-800/40">
+                    <fieldset
+                        className="rounded-3xl bg-neutral-50/30 p-4 dark:bg-neutral-800/40"
+                    >
                         <div>
                             <div className="flex flex-row items-center gap-2">
                                 <input
@@ -330,6 +457,7 @@ function SettingsPage() {
                                 name="units"
                                 id="ca"
                                 value={"ca"}
+                                onChange={handleUnitChange}
                             />
                             <label htmlFor="ca">CA (SI + km/h)</label>
                         </div>
@@ -339,6 +467,7 @@ function SettingsPage() {
                                 name="units"
                                 id="ul"
                                 value={"uk"}
+                                onChange={handleUnitChange}
                             />
                             <label htmlFor="uk">UK (SI + mph)</label>
                         </div>
@@ -348,6 +477,7 @@ function SettingsPage() {
                                 name="units"
                                 id="us"
                                 value={"us"}
+                                onChange={handleUnitChange}
                             />
                             <label htmlFor="us">US (Imperial)</label>
                         </div>
@@ -357,6 +487,7 @@ function SettingsPage() {
                                 name="units"
                                 id="si"
                                 value={"si"}
+                                onChange={handleUnitChange}
                             />
                             <label htmlFor="si">SI</label>
                         </div>
@@ -382,32 +513,88 @@ export default function App() {
     const [pageType, setPageType] = useState<Page>("Currently");
     const [weatherData, setWeatherData] =
         useState<weatherDataResponseParameters | null>(null);
+    const [location, setLocation] = useState<number[]>([51.5072, 0.1276]);
+    const [unitTypes, setUnitTypes] = useState<string>("si");
+    const [units, setUnits] = useState<string[]>([
+        "mm/h",
+        "cm",
+        "°C",
+        "m/s",
+        "hPa",
+        "km",
+    ]);
 
     useEffect(() => {
-        const fetchWeather = async (
-            lat: number,
-            long: number,
-            units: string,
-        ) => {
+        const fetchApproxLocation = async () => {
+            try {
+                const response = await fetch("https://ipinfo.io/json");
+                const data = await response.json();
+                const [lat, lon] = await data.loc.split(",");
+                setLocation([lat, lon]);
+            } catch {
+                console.error("Unable to fetch approx lat and lon");
+            }
+        };
+        fetchApproxLocation();
+    }, []);
+
+    useEffect(() => {
+        const fetchWeather = async (location: number[], units: string) => {
             try {
                 const response = await fetch(
-                    `https://pw-bridge.vercel.app/api/weather?lat=${lat}&long=${long}&units=${units}`,
+                    `https://pw-bridge.vercel.app/api/weather?lat=${location[0]}&long=${location[1]}&units=${units}`,
                 );
                 const weatherDataResponse = await response.json();
                 setWeatherData(weatherDataResponse);
                 console.log(weatherDataResponse);
-            } catch {}
+            } catch {
+                console.error("Could not fetch data");
+            }
         };
-        fetchWeather(43.6532, -79.3832, "ca");
-    }, []);
+        fetchWeather(location, unitTypes);
+    }, [location, unitTypes]);
+
+    const fetchLocation = () => {
+        const options = {
+            enableHighAccuracy: true,
+        };
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                setLocation([lat, lon]);
+            },
+            () => console.error("Unable to get location"),
+            options,
+        );
+    };
+
+    useEffect(() => {
+        const onUnitChange = () => {
+            if (unitTypes === "ca")
+                setUnits(["mm/h", "cm", "°C", "km/h", "hPa", "km"]);
+            else if (unitTypes === "si")
+                setUnits(["mm/h", "cm", "°C", "m/s", "hPa", "km"]);
+            else if (unitTypes === "uk")
+                setUnits(["mm/h", "cm", "°C", "mph", "hPa", "km"]);
+            else if (unitTypes === "us")
+                setUnits(["in/h", "in", "°F", "mph", "mbar", "mi"]);
+        };
+        onUnitChange();
+    }, [unitTypes]);
+
+    const handleUnitChange = (value: string) => setUnitTypes(value);
 
     if (pageType === "Home") content = <HomePage />;
     else if (pageType === "Currently")
-        content = <CurrentlyPage weatherData={weatherData} />;
-    else if (pageType === "Hourly") content = <HourlyPage />;
-    else if (pageType === "Daily") content = <DailyPage />;
+        content = <CurrentlyPage weatherData={weatherData} units={units} />;
+    else if (pageType === "Hourly")
+        content = <HourlyPage weatherData={weatherData} units={units} />;
+    else if (pageType === "Daily")
+        content = <DailyPage weatherData={weatherData} units={units} />;
     else if (pageType === "Radar") content = <RadarPage />;
-    else if (pageType === "Settings") content = <SettingsPage />;
+    else if (pageType === "Settings")
+        content = <SettingsPage handleUnitChange={(e: ChangeEvent<HTMLInputElement>) => handleUnitChange(e.target.value)} />;
 
     return (
         <>
@@ -418,7 +605,7 @@ export default function App() {
                         <Searchbar />
                     </div>
                     <div>
-                        <LocationButton />
+                        <LocationButton handleClick={fetchLocation} />
                     </div>
                 </div>
             </section>
@@ -428,9 +615,15 @@ export default function App() {
                 </div>
                 {content}
             </section>
-            <div className="m-4 mb-30 md:mb-4">
-                <Footer />
-            </div>
+            <section className="footer">
+                <div className="m-4 mb-30 md:mb-4">
+                    <p className="text-center text-xs">
+                        Powered by PirateWeather {weatherData?.flags.version},
+                        Maps © Leaflet, Basemap © Google, Radar Data ©
+                        Environment Canada
+                    </p>
+                </div>
+            </section>
         </>
     );
 }

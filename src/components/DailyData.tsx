@@ -12,7 +12,7 @@ type DailyDataProps = {
     precipAccumulation: string;
     cloudCover: string;
     pressure: string;
-    uv: string;
+    uvIndex: string;
     visibility: string;
 };
 
@@ -30,7 +30,7 @@ export default function DailyData({
     precipAccumulation,
     cloudCover,
     pressure,
-    uv,
+    uvIndex,
     visibility,
 }: DailyDataProps) {
     return (
@@ -76,7 +76,7 @@ export default function DailyData({
                         <summary>Additional Info</summary>
                         <p>Cloud Cover: {cloudCover}</p>
                         <p>Pressure: {pressure}</p>
-                        <p>UV: {uv}</p>
+                        <p>UV: {uvIndex}</p>
                         <p>Visibility: {visibility}</p>
                     </details>
                 </div>

@@ -62,6 +62,13 @@ export default function Map() {
     const [radarTimes, setRadarTimes] = useState<string[]>([]);
     const [activeTime, setActiveTime] = useState<string>("");
     const position: LatLngTuple = [43.65, -79.38];
+    const params = {
+        opacity: 0.7,
+        layers: "Radar_1km_SfcPrecipType",
+        format: "image/png",
+        transparent: true,
+        time: activeTime,
+    };
     const currentTime = radarTimes.indexOf(activeTime);
     const handleSliderChange = (e: ChangeEvent<HTMLInputElement>) =>
         setActiveTime(radarTimes[parseInt(e.target.value)]);
@@ -110,22 +117,12 @@ export default function Map() {
                     url="http://{s}.google.com/vt?lyrs=s,m&x={x}&y={y}&z={z}"
                     subdomains={["mt0", "mt1", "mt2", "mt3"]}
                 />
-                {activeTime != null ? (
+                {activeTime && (
                     <WMSTileLayer
                         key={activeTime}
                         url="https://geo.weather.gc.ca/geomet?"
-                        params={
-                            {
-                                opacity: 0.7,
-                                layers: "Radar_1km_SfcPrecipType",
-                                format: "image/png",
-                                transparent: true,
-                                time: activeTime,
-                            } as any
-                        }
+                        params={params}
                     />
-                ) : (
-                    ""
                 )}
             </MapContainer>
             <TimeSlider

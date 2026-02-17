@@ -42,9 +42,9 @@ export default function HourlyData({
                         </div>
                         <div>
                             <p className="text-nowrap">
-                                Wind Speed: {windSpeed} {windBearing}
+                                Wind Speed: {windSpeed} @ {windBearing}
                             </p>
-                            <p className="text-nowrap">Wind Gust: {windGust}</p>
+                            <p className="text-nowrap">Wind Gust: {windGust} @ {windBearing}</p>
                         </div>
                         <div>
                             <p className="text-nowrap">

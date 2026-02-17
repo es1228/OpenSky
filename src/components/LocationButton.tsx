@@ -1,7 +1,11 @@
-export default function LocationButton() {
+type LocationButtonProps = {
+    handleClick: () => void;
+}
+
+export default function LocationButton({handleClick}: LocationButtonProps) {
     return (
         <>
-            <button className="flex flex-row gap-2 rounded-3xl bg-blue-500/20 p-3 text-nowrap backdrop-blur hover:cursor-pointer">
+            <button className="flex flex-row gap-2 rounded-3xl bg-blue-500/20 p-3 text-nowrap backdrop-blur hover:cursor-pointer" onClick={handleClick}>
                 <span className="material-symbols-rounded">my_location</span>
                 <p className="hidden md:block">Current Location</p>
             </button>
