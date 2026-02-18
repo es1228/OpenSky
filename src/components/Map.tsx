@@ -85,7 +85,6 @@ export default function Map() {
     const [radarTimes, setRadarTimes] = useState<string[]>([]);
     const [activeTime, setActiveTime] = useState<string>("");
     const [hrrrInitTime, setHRRRInitTime] = useState<string>("");
-    const [hrrrInitDate, setHRRRInitDate] = useState<Date>(new Date());
     const [layerType, setLayerType] = useState<LayerTypes>("radar");
     const position: LatLngTuple = [43.65, -79.38];
     const params = {
@@ -135,7 +134,6 @@ export default function Map() {
                     const data = await response.json();
                     const hrrrInitTime = await data.model_init_utc;
                     setHRRRInitTime(hrrrInitTime);
-                    setHRRRInitDate(new Date(hrrrInitTime));
 
                     const hrrrMinutes = 1080;
                     const step = 15;
@@ -216,12 +214,11 @@ export default function Map() {
                         label={
                             layerType === "radar"
                                 ? new Date(activeTime).toLocaleString()
-                                : new Date(
-                                      hrrrInitDate.setMinutes(
-                                          hrrrInitDate.getMinutes() +
-                                              15 * currentTime,
-                                      ),
-                                  ).toLocaleString()
+                                : (() => {
+                                    const labelTime = new Date(hrrrInitTime);
+                                    labelTime.setMinutes(labelTime.getMinutes() + 15 * currentTime)
+                                    return labelTime.toLocaleString()
+                                })()
                         }
                         handleChange={handleSliderChange}
                     />
