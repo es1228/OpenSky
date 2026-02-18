@@ -2,17 +2,27 @@ import { useState, useEffect, ChangeEvent } from "react";
 import "./App.css";
 
 import Logo from "./components/Logo";
+import Navbar from "./components/Navbar";
 import Searchbar from "./components/Searchbar";
 import LocationButton from "./components/LocationButton";
-import CurrentCard from "./components/CurrentCard";
-import InfoCard from "./components/InfoCard";
-import HourlyData from "./components/HourlyData";
-import DailyData from "./components/DailyData";
-import SavedLocation from "./components/SavedLocation";
-import Map from "./components/Map";
+import HomePage from "./components/HomePage";
+import CurrentlyPage from "./components/CurrentlyPage";
+import HourlyPage from "./components/HourlyPage";
+import DailyPage from "./components/DailyPage";
+import RadarPage from "./components/RadarPage";
+import SettingsPage from "./components/SettingsPage";
+import Alert from "./components/Alert";
 
 type weatherDataResponseParameters = {
-    alerts: [];
+    alerts: Array<{
+        description: string;
+        expires: number;
+        regions: string;
+        severity: string;
+        time: number;
+        title: string;
+        uri: string;
+    }>;
     currently: {
         apparentTemperature: number;
         cape: number;
@@ -163,354 +173,22 @@ type weatherDataResponseParameters = {
     timezone: string;
 };
 
-type Page = "Home" | "Currently" | "Hourly" | "Daily" | "Radar" | "Settings";
+export type Page =
+    | "Home"
+    | "Currently"
+    | "Hourly"
+    | "Daily"
+    | "Radar"
+    | "Settings";
 
-type NavbarProps = {
-    handlePageChange: (p: Page) => void;
-};
-
-function Navbar({ handlePageChange }: NavbarProps) {
-    return (
-        <>
-            <nav className="flex flex-col rounded-3xl bg-neutral-400/20 p-4 backdrop-blur md:pr-18 dark:bg-neutral-800/40">
-                <ul className="flex flex-1 flex-row justify-center gap-4 md:flex-col">
-                    <li
-                        className="flex flex-col items-center gap-2 md:flex-row"
-                        onClick={() => handlePageChange("Home")}
-                    >
-                        <span className="material-symbols-rounded">home</span>
-                        <p className="text-xs md:text-lg">Home</p>
-                    </li>
-                    <li
-                        className="flex flex-col items-center gap-2 md:flex-row"
-                        onClick={() => handlePageChange("Currently")}
-                    >
-                        <span className="material-symbols-rounded">
-                            schedule
-                        </span>
-                        <p className="text-xs md:text-lg">Currently</p>
-                    </li>
-                    <li
-                        className="flex flex-col items-center gap-2 md:flex-row"
-                        onClick={() => handlePageChange("Hourly")}
-                    >
-                        <span className="material-symbols-rounded">
-                            calendar_clock
-                        </span>
-                        <p className="text-xs md:text-lg">Hourly</p>
-                    </li>
-                    <li
-                        className="flex flex-col items-center gap-2 md:flex-row"
-                        onClick={() => handlePageChange("Daily")}
-                    >
-                        <span className="material-symbols-rounded">
-                            calendar_view_week
-                        </span>
-                        <p className="text-xs md:text-lg">Daily</p>
-                    </li>
-                    <li
-                        className="flex flex-col items-center gap-2 md:flex-row"
-                        onClick={() => handlePageChange("Radar")}
-                    >
-                        <span className="material-symbols-rounded">radar</span>
-                        <p className="text-xs md:text-lg">Radar</p>
-                    </li>
-                    <li
-                        className="flex flex-col items-center gap-2 md:mt-auto md:flex-row"
-                        onClick={() => handlePageChange("Settings")}
-                    >
-                        <span className="material-symbols-rounded">
-                            settings
-                        </span>
-                        <p className="text-xs md:text-lg">Settings</p>
-                    </li>
-                </ul>
-            </nav>
-        </>
-    );
-}
-
-function HomePage() {
-    return (
-        <>
-            <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
-                <h1 className="text-3xl">Saved Locations</h1>
-                <SavedLocation
-                    city="Toronto"
-                    summary="Overcast"
-                    temperature="0°C"
-                />
-            </div>
-        </>
-    );
-}
-
-type WeatherPageProps = {
+export type WeatherPageProps = {
     weatherData: weatherDataResponseParameters | null;
     units: string[];
 };
 
-function CurrentlyPage({ weatherData, units }: WeatherPageProps) {
-    if (!weatherData) return;
-    return (
-        <>
-            <div className="mx-4 mt-20 flex flex-row flex-wrap justify-center gap-5 md:ml-60">
-                <CurrentCard
-                    temperature={`${Math.round(weatherData.currently.temperature)}${units[2]}`}
-                    summary={weatherData.currently.summary}
-                    date={new Date(
-                        weatherData.currently.time * 1000,
-                    ).toLocaleDateString()}
-                    location={`${weatherData.flags.nearestCity}, ${weatherData.flags.nearestCountry}`}
-                />
-                <div className="flex w-240 flex-col flex-wrap gap-2 rounded-3xl bg-neutral-400/20 p-4 dark:bg-neutral-800/40">
-                    <h1 className="text-lg font-bold">Highlights</h1>
-                    <div className="flex flex-row flex-wrap gap-3">
-                        <InfoCard
-                            title="Wind"
-                            icon="air"
-                            summary={`${Math.round(weatherData.currently.windSpeed)} ${units[3]} @ ${weatherData.currently.windBearing}°`}
-                            other={`Gust: ${Math.round(weatherData.currently.windGust)} ${units[3]} @ ${weatherData.currently.windBearing}°`}
-                        />
-                        <InfoCard
-                            title="UV"
-                            icon="wb_sunny"
-                            summary={`${Math.round(weatherData.currently.uvIndex)}`}
-                            other="Low"
-                        />
-                        <InfoCard
-                            title="Cloud Cover"
-                            icon="cloud"
-                            summary={`${Math.round(weatherData.currently.cloudCover * 100)}%`}
-                            other="High"
-                        />
-                        <InfoCard
-                            title="Humidity"
-                            icon="humidity_percentage"
-                            summary={`${Math.round(weatherData.currently.humidity * 100)}%`}
-                            other={`Dew Point: ${Math.round(weatherData.currently.dewPoint)}${units[2]}`}
-                        />
-                        <InfoCard
-                            title="Visibility"
-                            icon="visibility"
-                            summary={`${Math.round(weatherData.currently.visibility)} ${units[5]}`}
-                            other="Unlimited"
-                        />
-                        <InfoCard
-                            title="Feels Like"
-                            icon="thermostat"
-                            summary={`${Math.round(weatherData.currently.apparentTemperature)}${units[2]}`}
-                            other={`${Math.round(weatherData.currently.apparentTemperature) - Math.round(weatherData.currently.temperature)} From Actual`}
-                        />
-                    </div>
-                </div>
-                <InfoCard
-                    title="Pressure"
-                    icon="speed"
-                    summary={`${Math.round(weatherData.currently.pressure)} ${units[4]}`}
-                    other="Steady"
-                />
-                <InfoCard
-                    title="Rain Accumulation"
-                    icon="rainy"
-                    summary={`${Math.round(weatherData.currently.currentDayLiquid)} ${units[1]}`}
-                    other={`${Math.max(0, Math.round(weatherData.daily.data[0].liquidAccumulation) - Math.round(weatherData.currently.currentDayLiquid))} ${units[1]} More Expected`}
-                />
-                <InfoCard
-                    title="Snow Accumulation"
-                    icon="weather_snowy"
-                    summary={`${Math.round(weatherData.currently.currentDaySnow)} ${units[1]}`}
-                    other={`${Math.max(0, Math.round(weatherData.daily.data[0].snowAccumulation) - Math.round(weatherData.currently.currentDaySnow))} ${units[1]} More Expected`}
-                />
-                <InfoCard
-                    title="Ice Accumulation"
-                    icon="weather_hail"
-                    summary={`${Math.round(weatherData.currently.currentDayIce)} ${units[1]}`}
-                    other={`${Math.max(0, Math.round(weatherData.daily.data[0].iceAccumulation) - Math.round(weatherData.currently.currentDayIce))} ${units[1]} More Expected`}
-                />
-            </div>
-        </>
-    );
-}
-
-function HourlyPage({ weatherData, units }: WeatherPageProps) {
-    if (!weatherData) return;
-    const hourlyItems = weatherData.hourly.data.map((hour) => (
-        <HourlyData
-            key={hour.time}
-            time={`${new Date(hour.time * 1000).toLocaleString()}`}
-            temperature={`${Math.round(hour.temperature)}${units[2]}`}
-            summary={`${hour.summary}`}
-            apparentTemperature={`${Math.round(hour.apparentTemperature)}${units[2]}`}
-            humidity={`${Math.round(hour.humidity * 100)}%`}
-            dewPoint={`${Math.round(hour.dewPoint)}${units[2]}`}
-            windSpeed={`${Math.round(hour.windSpeed)} ${units[3]}`}
-            windGust={`${Math.round(hour.windGust)} ${units[3]}`}
-            windBearing={`${Math.round(hour.windBearing)}°`}
-            precipIntensity={`${hour.precipIntensity.toFixed(2)} ${units[0]}`}
-            precipAccumulation={`${hour.precipAccumulation.toFixed(2)} ${units[1]}`}
-        />
-    ));
-    return (
-        <>
-            <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
-                <h1 className="text-3xl">Hourly</h1>
-                {hourlyItems}
-            </div>
-        </>
-    );
-}
-
-function DailyPage({ weatherData, units }: WeatherPageProps) {
-    if (!weatherData) return;
-    const dailyItems = weatherData.daily.data.map((day) => (
-        <DailyData
-            key={day.time}
-            time={`${new Date(day.time * 1000).toDateString()}`}
-            temperatureMax={`${Math.round(day.temperatureMax)}${units[2]}`}
-            temperatureMin={`${Math.round(day.temperatureMin)}${units[2]}`}
-            summary={`${day.summary}`}
-            humidity={`${Math.round(day.humidity * 100)}%`}
-            dewPoint={`${Math.round(day.dewPoint)}${units[2]}`}
-            windSpeed={`${Math.round(day.windSpeed)} ${units[3]}`}
-            windGust={`${Math.round(day.windGust)} ${units[3]}`}
-            windBearing={`${Math.round(day.windBearing)}°`}
-            precipIntensity={`${day.precipIntensity.toFixed(2)} ${units[0]}`}
-            precipAccumulation={`${day.precipAccumulation.toFixed(2)} ${units[1]}`}
-            cloudCover={`${Math.round(day.cloudCover * 100)}%`}
-            pressure={`${Math.round(day.pressure)} ${units[4]}`}
-            uvIndex={`${Math.round(day.uvIndex)}`}
-            visibility={`${Math.round(day.visibility)} ${units[5]}`}
-        />
-    ));
-    return (
-        <>
-            <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
-                <h1 className="text-3xl">Daily</h1>
-                {dailyItems}
-            </div>
-        </>
-    );
-}
-
-function RadarPage() {
-    return (
-        <>
-            <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
-                <Map />
-            </div>
-        </>
-    );
-}
-
-type SettingsPageProps = {
-    handleUnitChange: (e: ChangeEvent<HTMLInputElement>) => void;
-};
-
-function SettingsPage({ handleUnitChange }: SettingsPageProps) {
-    return (
-        <>
-            <div className="mx-4 mt-20 flex flex-col gap-5 overflow-auto md:ml-60">
-                <div className="flex flex-col gap-2">
-                    <h1 className="text-3xl">Theme</h1>
-                    <fieldset
-                        className="rounded-3xl bg-neutral-50/30 p-4 dark:bg-neutral-800/40"
-                    >
-                        <div>
-                            <div className="flex flex-row items-center gap-2">
-                                <input
-                                    type="radio"
-                                    name="theme"
-                                    id="light"
-                                    value={"light"}
-                                />
-                                <label htmlFor="light">Light</label>
-                            </div>
-                            <div className="flex flex-row items-center gap-2">
-                                <input
-                                    type="radio"
-                                    name="theme"
-                                    id="dark"
-                                    value={"dark"}
-                                />
-                                <label htmlFor="dark">Dark</label>
-                            </div>
-                            <div className="flex flex-row items-center gap-2">
-                                <input
-                                    type="radio"
-                                    name="theme"
-                                    id="system"
-                                    value={"system"}
-                                    defaultChecked={true}
-                                />
-                                <label htmlFor="system">System</label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div className="flex flex-col gap-2">
-                    <h1 className="text-3xl">Units</h1>
-                    <fieldset className="rounded-3xl bg-neutral-50/30 p-4 dark:bg-neutral-800/40">
-                        <div className="flex flex-row items-center gap-2">
-                            <input
-                                type="radio"
-                                name="units"
-                                id="ca"
-                                value={"ca"}
-                                onChange={handleUnitChange}
-                            />
-                            <label htmlFor="ca">CA (SI + km/h)</label>
-                        </div>
-                        <div className="flex flex-row items-center gap-2">
-                            <input
-                                type="radio"
-                                name="units"
-                                id="ul"
-                                value={"uk"}
-                                onChange={handleUnitChange}
-                            />
-                            <label htmlFor="uk">UK (SI + mph)</label>
-                        </div>
-                        <div className="flex flex-row items-center gap-2">
-                            <input
-                                type="radio"
-                                name="units"
-                                id="us"
-                                value={"us"}
-                                onChange={handleUnitChange}
-                            />
-                            <label htmlFor="us">US (Imperial)</label>
-                        </div>
-                        <div className="flex flex-row items-center gap-2">
-                            <input
-                                type="radio"
-                                name="units"
-                                id="si"
-                                value={"si"}
-                                onChange={handleUnitChange}
-                            />
-                            <label htmlFor="si">SI</label>
-                        </div>
-                        <div className="flex flex-row items-center gap-2">
-                            <input
-                                type="radio"
-                                name="units"
-                                id="auto"
-                                value={"auto"}
-                                defaultChecked={true}
-                            />
-                            <label htmlFor="auto">Auto</label>
-                        </div>
-                    </fieldset>
-                </div>
-            </div>
-        </>
-    );
-}
-
 export default function App() {
     let content: any;
-    const [pageType, setPageType] = useState<Page>("Currently");
+    const [pageType, setPageType] = useState<Page>("Radar");
     const [weatherData, setWeatherData] =
         useState<weatherDataResponseParameters | null>(null);
     const [location, setLocation] = useState<number[]>([51.5072, 0.1276]);
@@ -594,7 +272,13 @@ export default function App() {
         content = <DailyPage weatherData={weatherData} units={units} />;
     else if (pageType === "Radar") content = <RadarPage />;
     else if (pageType === "Settings")
-        content = <SettingsPage handleUnitChange={(e: ChangeEvent<HTMLInputElement>) => handleUnitChange(e.target.value)} />;
+        content = (
+            <SettingsPage
+                handleUnitChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    handleUnitChange(e.target.value)
+                }
+            />
+        );
 
     return (
         <>
@@ -613,7 +297,10 @@ export default function App() {
                 <div className="fixed right-0 bottom-5 z-10000 flex w-full flex-1 justify-center md:top-20 md:left-5 md:w-48 md:justify-start">
                     <Navbar handlePageChange={(p: Page) => setPageType(p)} />
                 </div>
-                {content}
+                <div className="mx-4 mt-20 md:ml-60 flex flex-col gap-4">
+                    <Alert weatherData={weatherData} units={units} />
+                    {content}
+                </div>
             </section>
             <section className="footer">
                 <div className="m-4 mb-30 md:mb-4">

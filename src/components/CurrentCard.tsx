@@ -3,6 +3,7 @@ type CurrentCardProps = {
     summary: string;
     date: string;
     location: string;
+    icon: string;
 };
 
 export default function CurrentCard({
@@ -10,11 +11,18 @@ export default function CurrentCard({
     summary,
     date,
     location,
+    icon,
 }: CurrentCardProps) {
     return (
         <>
             <div className="flex w-full flex-col justify-between gap-4 rounded-3xl bg-neutral-400/20 p-4 backdrop-blur md:w-70 dark:bg-neutral-800/40">
                 <h1 className="text-lg font-bold">Current Conditions</h1>
+                <img
+                    src={`\\src\\assets\\${icon}.svg`}
+                    alt={`${icon}`}
+                    height={100}
+                    width={100}
+                />
                 <h1 className="text-5xl">{temperature}</h1>
                 <p>{summary}</p>
                 <hr className="h-0.5 rounded-3xl border-none bg-neutral-950 dark:bg-neutral-50" />

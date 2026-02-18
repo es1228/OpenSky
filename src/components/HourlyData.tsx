@@ -10,6 +10,7 @@ type HourlyDataProps = {
     windBearing: string;
     precipIntensity: string;
     precipAccumulation: string;
+    icon: string;
 };
 
 export default function HourlyData({
@@ -24,6 +25,7 @@ export default function HourlyData({
     windBearing,
     precipIntensity,
     precipAccumulation,
+    icon,
 }: HourlyDataProps) {
     return (
         <>
@@ -31,6 +33,12 @@ export default function HourlyData({
                 <h1>{time}</h1>
                 <div className="flex flex-col gap-4 md:flex-row md:items-center">
                     <div>
+                        <img
+                            src={`\\src\\assets\\${icon}.svg`}
+                            alt={`${icon}`}
+                            height={100}
+                            width={100}
+                        />
                         <h1 className="text-4xl">{temperature}</h1>
                         <p>{summary}</p>
                         <p>Feels: {apparentTemperature}</p>
@@ -44,7 +52,9 @@ export default function HourlyData({
                             <p className="text-nowrap">
                                 Wind Speed: {windSpeed} @ {windBearing}
                             </p>
-                            <p className="text-nowrap">Wind Gust: {windGust} @ {windBearing}</p>
+                            <p className="text-nowrap">
+                                Wind Gust: {windGust} @ {windBearing}
+                            </p>
                         </div>
                         <div>
                             <p className="text-nowrap">

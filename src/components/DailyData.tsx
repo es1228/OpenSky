@@ -14,6 +14,7 @@ type DailyDataProps = {
     pressure: string;
     uvIndex: string;
     visibility: string;
+    icon: string;
 };
 
 export default function DailyData({
@@ -32,6 +33,7 @@ export default function DailyData({
     pressure,
     uvIndex,
     visibility,
+    icon,
 }: DailyDataProps) {
     return (
         <>
@@ -40,6 +42,12 @@ export default function DailyData({
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-4 md:flex-row md:items-center">
                         <div>
+                            <img
+                                src={`\\src\\assets\\${icon}.svg`}
+                                alt={`${icon}`}
+                                height={100}
+                                width={100}
+                            />
                             <p>{summary}</p>
                             <p>Hi: {temperatureMax}</p>
                             <p>Lo: {temperatureMin}</p>
