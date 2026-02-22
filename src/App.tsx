@@ -14,11 +14,11 @@ import Map from "./components/Map";
 import SettingsPage from "./components/SettingsPage";
 import Alert from "./components/Alert";
 
-type weatherDataResponseParameters = {
+type WeatherDataResponseParameters = {
     alerts: Array<{
         description: string;
         expires: number;
-        regions: string;
+        regions: Array<string>
         severity: string;
         time: number;
         title: string;
@@ -174,6 +174,32 @@ type weatherDataResponseParameters = {
     timezone: string;
 };
 
+type PhotonResponse = {
+    features: Array<{
+        properties: {
+            name: string;
+            country: string;
+            state: string;
+            osm_id: number;
+        };
+        geometry: {
+            coordinates: number[];
+        };
+    }>;
+};
+
+type PhotonFeature = {
+    properties: {
+        name: string;
+        country: string;
+        state: string;
+        osm_id: number;
+    };
+    geometry: {
+        coordinates: number[];
+    };
+};
+
 export type Page =
     | "Home"
     | "Currently"
@@ -183,7 +209,7 @@ export type Page =
     | "Settings";
 
 export type WeatherPageProps = {
-    weatherData: weatherDataResponseParameters | null;
+    weatherData: WeatherDataResponseParameters | null;
     units: string[];
 };
 
@@ -191,7 +217,7 @@ export default function App() {
     let content: any;
     const [pageType, setPageType] = useState<Page>("Home");
     const [weatherData, setWeatherData] =
-        useState<weatherDataResponseParameters | null>(null);
+        useState<WeatherDataResponseParameters | null>(null);
     const [location, setLocation] = useState<number[]>([51.5072, 0.1276]);
     const [country, setCountry] = useState<string>("");
     const [theme, setTheme] = useState<string>(
@@ -208,6 +234,8 @@ export default function App() {
         "hPa",
         "km",
     ]);
+    const [locations, setLocations] = useState<PhotonFeature[] | null>(null);
+    const [query, setQuery] = useState<string>("");
 
     useEffect(() => {
         const fetchApproxLocation = async () => {
@@ -298,6 +326,69 @@ export default function App() {
 
     const handleUnitChange = (value: string) => setunitType(value);
     const handleThemeChange = (value: string) => setTheme(value);
+    const handleLocationClick = (location: number[]) => {
+        setLocation(location);
+        const countryCode = iso1A2Code([
+            location[1],
+            location[0],
+        ])?.toLowerCase();
+        if (countryCode) setCountry(countryCode);
+    };
+    const handleBlur = () => setLocations(null);
+    const handleFocus = () => fetchLocations(query);
+
+    useEffect(() => {
+        if (query.length >= 3) {
+            const timer = setTimeout(() => {
+                fetchLocations(query);
+            }, 400)
+            return () => clearTimeout(timer);
+        } else setLocations(null)
+    }, [query])
+
+    const fetchLocations = async (value: string) => {
+        try {
+            const response = await fetch(
+                `https://photon.komoot.io/api/?q=${encodeURIComponent(value)}`,
+            );
+            const data: PhotonResponse = await response.json();
+            setLocations(data.features.slice(0, 5));
+        } catch {
+            console.error("Could not search location");
+        }
+    };
+
+    const items = locations?.map((features) => (
+        <li
+            onMouseDown={() =>
+                handleLocationClick([
+                    features.geometry.coordinates[1],
+                    features.geometry.coordinates[0],
+                ])
+            }
+            className="list-none p-3 first-of-type:rounded-t-3xl last-of-type:rounded-b-3xl hover:bg-neutral-200/60 dark:hover:bg-neutral-800/60"
+        >
+            <div
+                key={features.properties.osm_id}
+                className="flex flex-row gap-1"
+            >
+                <span className="material-symbols-rounded text-black dark:text-white">
+                    location_on
+                </span>
+                <p className="text-black dark:text-white">
+                    {features.properties.name
+                        ? `${features.properties.name},`
+                        : ""}{" "}
+                    {features.properties.state
+                        ? `${features.properties.state},`
+                        : ""}{" "}
+                    {features.properties.country
+                        ? `${features.properties.country}`
+                        : ""}
+                </p>
+            </div>
+        </li>
+    ));
 
     if (pageType === "Home") content = <HomePage />;
     else if (pageType === "Currently")
@@ -333,13 +424,22 @@ export default function App() {
                 <div className="fixed top-4 right-4 left-4 z-1000 flex flex-row items-center justify-between gap-4">
                     <Logo />
                     <div>
-                        <Searchbar />
+                        <Searchbar
+                            handleChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                setQuery(e.target.value)
+                            }
+                            handleBlur={handleBlur}
+                            handleFocus={handleFocus}
+                        />
                     </div>
                     <div>
                         <LocationButton handleClick={fetchLocation} />
                     </div>
                 </div>
             </section>
+            <div className="fixed left-1/2 z-10000 w-[95vw] -translate-x-1/2 rounded-3xl bg-neutral-50/60 backdrop-blur md:w-md dark:bg-neutral-950/60">
+                {items}
+            </div>
             <section className="navbar">
                 <div className="fixed right-0 bottom-5 z-10000 flex w-full flex-1 justify-center md:top-20 md:left-5 md:w-48 md:justify-start">
                     <Navbar handlePageChange={(p: Page) => setPageType(p)} />
@@ -352,9 +452,9 @@ export default function App() {
             <section className="footer">
                 <div className="m-4 mb-30 md:mb-4 md:ml-60">
                     <p className="text-center text-xs text-black dark:text-white">
-                        Powered by PirateWeather {weatherData?.flags.version},
-                        Maps © Leaflet, Basemap © Esri, Radar Data ©
-                        ECCC, NOAA, NWS
+                        Powered by PirateWeather{" "}
+                        {weatherData?.flags.version ?? ""}, Maps © Leaflet,
+                        Basemap © Esri, Radar Data © ECCC, NOAA, NWS
                     </p>
                 </div>
             </section>

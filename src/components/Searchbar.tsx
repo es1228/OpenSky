@@ -1,4 +1,12 @@
-export default function Searchbar() {
+import { ChangeEvent } from "react";
+
+type SearchbarProps = {
+    handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    handleFocus: (e: ChangeEvent<HTMLInputElement>) => void;
+    handleBlur: () => void;
+};
+
+export default function Searchbar({ handleChange, handleFocus, handleBlur }: SearchbarProps) {
     return (
         <>
             <div className="relative">
@@ -12,6 +20,10 @@ export default function Searchbar() {
                     placeholder="Enter a city..."
                     className="rounded-3xl bg-neutral-400/20 p-3 pl-11 text-black outline-0 backdrop-blur md:min-w-sm dark:bg-neutral-800/40 dark:text-white"
                     id="search"
+                    autoComplete="off"
+                    onChange={handleChange}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
                 />
             </div>
         </>

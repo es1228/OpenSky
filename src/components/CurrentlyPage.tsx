@@ -45,7 +45,7 @@ export default function CurrentlyPage({
                     date={new Date(
                         weatherData.currently.time * 1000,
                     ).toLocaleDateString()}
-                    location={`${weatherData.flags.nearestCity}, ${weatherData.flags.nearestCountry}`}
+                    location={`${weatherData.flags.nearestCity}, ${weatherData.flags.nearestSubNational}, ${weatherData.flags.nearestCountry}`}
                     icon={weatherData.currently.icon}
                 />
                 <div className="flex w-240 flex-col flex-wrap gap-2 rounded-3xl bg-neutral-400/20 p-4 dark:bg-neutral-800/40">

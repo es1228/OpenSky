@@ -3,8 +3,13 @@ import { WeatherPageProps } from "../App";
 export default function Alert({ weatherData }: WeatherPageProps) {
     const alerts = weatherData?.alerts.map((alert) => (
         <>
-            <div key={alert.uri} className="flex flex-col gap-2">
-                <h1 className="text-3xl capitalize">{alert.title}</h1>
+            <div
+                key={alert.uri}
+                className="flex flex-col gap-2 text-black dark:text-white"
+            >
+                <h1 className="text-3xl text-black capitalize dark:text-white">
+                    {alert.title}
+                </h1>
                 <details>
                     <summary>More Info</summary>
                     <p className="text-black dark:text-white">
@@ -14,7 +19,7 @@ export default function Alert({ weatherData }: WeatherPageProps) {
                         Ends: {new Date(alert.expires * 1000).toLocaleString()}
                     </p>
                     <p className="text-black dark:text-white">
-                        Regions: {alert.regions}
+                        Regions: {alert.regions.join(", ")}
                     </p>
                     <p className="text-black dark:text-white">
                         Severity: {alert.severity}
