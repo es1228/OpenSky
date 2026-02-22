@@ -27,7 +27,7 @@ export default function DailyPage({ weatherData, units }: WeatherPageProps) {
     return (
         <>
             <div className="flex flex-col gap-5 overflow-auto">
-                <h1 className="text-3xl">Daily</h1>
+                <h1 className="text-3xl text-black dark:text-white">Daily</h1>
                 {dailyItems}
             </div>
         </>

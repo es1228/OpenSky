@@ -23,7 +23,7 @@ export default function HourlyPage({ weatherData, units }: WeatherPageProps) {
     return (
         <>
             <div className="flex flex-col gap-5 overflow-auto">
-                <h1 className="text-3xl">Hourly</h1>
+                <h1 className="text-3xl text-black dark:text-white">Hourly</h1>
                 {hourlyItems}
             </div>
         </>

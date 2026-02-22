@@ -1,4 +1,5 @@
 import { useState, useEffect, ChangeEvent } from "react";
+import { iso1A2Code } from "country-coder";
 import "./App.css";
 
 import Logo from "./components/Logo";
@@ -9,7 +10,7 @@ import HomePage from "./components/HomePage";
 import CurrentlyPage from "./components/CurrentlyPage";
 import HourlyPage from "./components/HourlyPage";
 import DailyPage from "./components/DailyPage";
-import RadarPage from "./components/RadarPage";
+import Map from "./components/Map";
 import SettingsPage from "./components/SettingsPage";
 import Alert from "./components/Alert";
 
@@ -188,11 +189,17 @@ export type WeatherPageProps = {
 
 export default function App() {
     let content: any;
-    const [pageType, setPageType] = useState<Page>("Radar");
+    const [pageType, setPageType] = useState<Page>("Home");
     const [weatherData, setWeatherData] =
         useState<weatherDataResponseParameters | null>(null);
     const [location, setLocation] = useState<number[]>([51.5072, 0.1276]);
-    const [unitTypes, setUnitTypes] = useState<string>("si");
+    const [country, setCountry] = useState<string>("");
+    const [theme, setTheme] = useState<string>(
+        localStorage.getItem("theme") || "system",
+    );
+    const [unitType, setunitType] = useState<string>(
+        localStorage.getItem("unitType") || "auto",
+    );
     const [units, setUnits] = useState<string[]>([
         "mm/h",
         "cm",
@@ -209,28 +216,14 @@ export default function App() {
                 const data = await response.json();
                 const [lat, lon] = await data.loc.split(",");
                 setLocation([lat, lon]);
+                const countryCode = iso1A2Code([lon, lat])?.toLowerCase();
+                if (countryCode) setCountry(countryCode);
             } catch {
                 console.error("Unable to fetch approx lat and lon");
             }
         };
         fetchApproxLocation();
     }, []);
-
-    useEffect(() => {
-        const fetchWeather = async (location: number[], units: string) => {
-            try {
-                const response = await fetch(
-                    `https://pw-bridge.vercel.app/api/weather?lat=${location[0]}&long=${location[1]}&units=${units}`,
-                );
-                const weatherDataResponse = await response.json();
-                setWeatherData(weatherDataResponse);
-                console.log(weatherDataResponse);
-            } catch {
-                console.error("Could not fetch data");
-            }
-        };
-        fetchWeather(location, unitTypes);
-    }, [location, unitTypes]);
 
     const fetchLocation = () => {
         const options = {
@@ -248,20 +241,63 @@ export default function App() {
     };
 
     useEffect(() => {
+        const changeTheme = () => {
+            const root = window.document.documentElement;
+            root.classList.remove("light", "dark");
+            if (theme === "system")
+                if (window.matchMedia("(prefers-color-scheme: dark)").matches)
+                    root.classList.add("dark");
+                else root.classList.add("light");
+            else root.classList.add(theme);
+            localStorage.setItem("theme", theme);
+        };
+        changeTheme();
+    }, [theme]);
+
+    useEffect(() => {
+        const fetchWeather = async (location: number[], units: string) => {
+            try {
+                if (unitType === "auto") {
+                    units = country;
+                    if (units !== "ca" && units !== "us" && units !== "uk")
+                        units = "si";
+                    if (units === "ca")
+                        setUnits(["mm/h", "cm", "°C", "km/h", "hPa", "km"]);
+                    else if (units === "si")
+                        setUnits(["mm/h", "cm", "°C", "m/s", "hPa", "km"]);
+                    else if (units === "uk")
+                        setUnits(["mm/h", "cm", "°C", "mph", "hPa", "km"]);
+                    else setUnits(["in/h", "in", "°F", "mph", "mbar", "mi"]);
+                }
+                const response = await fetch(
+                    `https://pw-bridge.vercel.app/api/weather?lat=${location[0]}&long=${location[1]}&units=${units}`,
+                );
+                const weatherDataResponse = await response.json();
+                setWeatherData(weatherDataResponse);
+                console.log(weatherDataResponse);
+            } catch {
+                console.error("Could not fetch data");
+            }
+        };
+        fetchWeather(location, unitType);
+    }, [location, unitType]);
+
+    useEffect(() => {
         const onUnitChange = () => {
-            if (unitTypes === "ca")
+            if (unitType === "ca")
                 setUnits(["mm/h", "cm", "°C", "km/h", "hPa", "km"]);
-            else if (unitTypes === "si")
+            else if (unitType === "si")
                 setUnits(["mm/h", "cm", "°C", "m/s", "hPa", "km"]);
-            else if (unitTypes === "uk")
+            else if (unitType === "uk")
                 setUnits(["mm/h", "cm", "°C", "mph", "hPa", "km"]);
-            else if (unitTypes === "us")
-                setUnits(["in/h", "in", "°F", "mph", "mbar", "mi"]);
+            else setUnits(["in/h", "in", "°F", "mph", "mbar", "mi"]);
+            localStorage.setItem("unitType", unitType);
         };
         onUnitChange();
-    }, [unitTypes]);
+    }, [unitType]);
 
-    const handleUnitChange = (value: string) => setUnitTypes(value);
+    const handleUnitChange = (value: string) => setunitType(value);
+    const handleThemeChange = (value: string) => setTheme(value);
 
     if (pageType === "Home") content = <HomePage />;
     else if (pageType === "Currently")
@@ -270,13 +306,24 @@ export default function App() {
         content = <HourlyPage weatherData={weatherData} units={units} />;
     else if (pageType === "Daily")
         content = <DailyPage weatherData={weatherData} units={units} />;
-    else if (pageType === "Radar") content = <RadarPage />;
+    else if (pageType === "Radar")
+        content = (
+            <Map
+                lat={weatherData?.latitude ?? 51.5072}
+                lon={weatherData?.longitude ?? 0.1276}
+            />
+        );
     else if (pageType === "Settings")
         content = (
             <SettingsPage
                 handleUnitChange={(e: ChangeEvent<HTMLInputElement>) =>
                     handleUnitChange(e.target.value)
                 }
+                handleThemeChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    handleThemeChange(e.target.value)
+                }
+                unitType={unitType}
+                theme={theme}
             />
         );
 
@@ -297,17 +344,17 @@ export default function App() {
                 <div className="fixed right-0 bottom-5 z-10000 flex w-full flex-1 justify-center md:top-20 md:left-5 md:w-48 md:justify-start">
                     <Navbar handlePageChange={(p: Page) => setPageType(p)} />
                 </div>
-                <div className="mx-4 mt-20 md:ml-60 flex flex-col gap-4">
+                <div className="mx-4 mt-20 flex flex-col gap-4 md:ml-60">
                     <Alert weatherData={weatherData} units={units} />
                     {content}
                 </div>
             </section>
             <section className="footer">
-                <div className="m-4 mb-30 md:mb-4">
-                    <p className="text-center text-xs">
+                <div className="m-4 mb-30 md:mb-4 md:ml-60">
+                    <p className="text-center text-xs text-black dark:text-white">
                         Powered by PirateWeather {weatherData?.flags.version},
-                        Maps © Leaflet, Basemap © Google, Radar Data ©
-                        Environment Canada
+                        Maps © Leaflet, Basemap © Esri, Radar Data ©
+                        ECCC, NOAA, NWS
                     </p>
                 </div>
             </section>

@@ -2,8 +2,40 @@ import CurrentCard from "./CurrentCard";
 import InfoCard from "./InfoCard";
 import { WeatherPageProps } from "../App";
 
-export default function CurrentlyPage({ weatherData, units }: WeatherPageProps) {
+export default function CurrentlyPage({
+    weatherData,
+    units,
+}: WeatherPageProps) {
     if (!weatherData) return;
+
+    const uvSummary = (uv: number) => {
+        if (uv <= 2) return "Low";
+        else if (uv >= 3 && uv <= 5) return "Moderate";
+        else if (uv >= 6 && uv <= 7) return "High";
+        else if (uv >= 8 && uv <= 10) return "Very High";
+        return "Extreme";
+    };
+
+    const cloudSummary = (cloudCover: number) => {
+        if (cloudCover <= 0.3) return "Low";
+        else if (cloudCover > 0.3 && cloudCover < 0.7) return "Moderate";
+        return "High";
+    };
+
+    const visibilitySummary = (visibility: number) => {
+        if (units[5] === "mi") {
+            if (visibility >= 6) return "Good";
+            if (visibility >= 2 && visibility < 6) return "Moderate";
+            if (visibility >= 0.5 && visibility < 2) return "Poor";
+            if (visibility < 0.5) return "Very Poor";
+        } else {
+            if (visibility >= 10) return "Good";
+            if (visibility >= 4 && visibility < 10) return "Moderate";
+            if (visibility >= 1 && visibility < 4) return "Poor";
+            if (visibility < 1) return "Very Poor";
+        }
+    };
+
     return (
         <>
             <div className="flex flex-row flex-wrap justify-center gap-5">
@@ -17,7 +49,9 @@ export default function CurrentlyPage({ weatherData, units }: WeatherPageProps) 
                     icon={weatherData.currently.icon}
                 />
                 <div className="flex w-240 flex-col flex-wrap gap-2 rounded-3xl bg-neutral-400/20 p-4 dark:bg-neutral-800/40">
-                    <h1 className="text-lg font-bold">Highlights</h1>
+                    <h1 className="text-lg font-bold text-black dark:text-white">
+                        Highlights
+                    </h1>
                     <div className="flex flex-row flex-wrap gap-3">
                         <InfoCard
                             title="Wind"
@@ -29,13 +63,13 @@ export default function CurrentlyPage({ weatherData, units }: WeatherPageProps) 
                             title="UV"
                             icon="wb_sunny"
                             summary={`${Math.round(weatherData.currently.uvIndex)}`}
-                            other="Low"
+                            other={`${uvSummary(Math.round(weatherData.currently.uvIndex))}`}
                         />
                         <InfoCard
                             title="Cloud Cover"
                             icon="cloud"
                             summary={`${Math.round(weatherData.currently.cloudCover * 100)}%`}
-                            other="High"
+                            other={`${cloudSummary(weatherData.currently.cloudCover)}`}
                         />
                         <InfoCard
                             title="Humidity"
@@ -47,7 +81,7 @@ export default function CurrentlyPage({ weatherData, units }: WeatherPageProps) 
                             title="Visibility"
                             icon="visibility"
                             summary={`${Math.round(weatherData.currently.visibility)} ${units[5]}`}
-                            other="Unlimited"
+                            other={`${visibilitySummary(weatherData.currently.visibility)}`}
                         />
                         <InfoCard
                             title="Feels Like"
@@ -61,7 +95,7 @@ export default function CurrentlyPage({ weatherData, units }: WeatherPageProps) 
                     title="Pressure"
                     icon="speed"
                     summary={`${Math.round(weatherData.currently.pressure)} ${units[4]}`}
-                    other="Steady"
+                    other={`${Math.round(weatherData.currently.pressure) - 1013} From MSL`}
                 />
                 <InfoCard
                     title="Rain Accumulation"

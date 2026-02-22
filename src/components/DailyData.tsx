@@ -38,7 +38,7 @@ export default function DailyData({
     return (
         <>
             <div className="flex w-full flex-col gap-2 rounded-3xl bg-neutral-400/20 p-4 backdrop-blur dark:bg-neutral-800/40">
-                <h1>{time}</h1>
+                <h1 className="text-black dark:text-white">{time}</h1>
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-4 md:flex-row md:items-center">
                         <div>
@@ -48,32 +48,38 @@ export default function DailyData({
                                 height={100}
                                 width={100}
                             />
-                            <p>{summary}</p>
-                            <p>Hi: {temperatureMax}</p>
-                            <p>Lo: {temperatureMin}</p>
+                            <p className="text-black dark:text-white">
+                                {summary}
+                            </p>
+                            <p className="text-black dark:text-white">
+                                Hi: {temperatureMax}
+                            </p>
+                            <p className="text-black dark:text-white">
+                                Lo: {temperatureMin}
+                            </p>
                         </div>
                         <div className="ml-auto flex flex-row flex-wrap gap-4">
                             <div>
-                                <p className="text-nowrap">
+                                <p className="text-nowrap text-black dark:text-white">
                                     Humidity: {humidity}
                                 </p>
-                                <p className="text-nowrap">
+                                <p className="text-nowrap text-black dark:text-white">
                                     Dew Point: {dewPoint}
                                 </p>
                             </div>
                             <div>
-                                <p className="text-nowrap">
+                                <p className="text-nowrap text-black dark:text-white">
                                     Wind Speed: {windSpeed} {windBearing}
                                 </p>
-                                <p className="text-nowrap">
+                                <p className="text-nowrap text-black dark:text-white">
                                     Wind Gust: {windGust} {windBearing}
                                 </p>
                             </div>
                             <div>
-                                <p className="text-nowrap">
+                                <p className="text-nowrap text-black dark:text-white">
                                     Precip Intensity: {precipIntensity}
                                 </p>
-                                <p className="text-nowrap">
+                                <p className="text-nowrap text-black dark:text-white">
                                     Precip Accumulation: {precipAccumulation}
                                 </p>
                             </div>
@@ -81,11 +87,21 @@ export default function DailyData({
                     </div>
                     <hr className="h-0.5 rounded-3xl border-none bg-neutral-950 dark:bg-neutral-50" />
                     <details>
-                        <summary>Additional Info</summary>
-                        <p>Cloud Cover: {cloudCover}</p>
-                        <p>Pressure: {pressure}</p>
-                        <p>UV: {uvIndex}</p>
-                        <p>Visibility: {visibility}</p>
+                        <summary className="text-black dark:text-white">
+                            Additional Info
+                        </summary>
+                        <p className="text-black dark:text-white">
+                            Cloud Cover: {cloudCover}
+                        </p>
+                        <p className="text-black dark:text-white">
+                            Pressure: {pressure}
+                        </p>
+                        <p className="text-black dark:text-white">
+                            UV: {uvIndex}
+                        </p>
+                        <p className="text-black dark:text-white">
+                            Visibility: {visibility}
+                        </p>
                     </details>
                 </div>
             </div>

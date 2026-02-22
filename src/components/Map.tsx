@@ -7,7 +7,6 @@ import {
     WMSTileLayer,
     LayersControl,
     useMapEvents,
-    useMap,
 } from "react-leaflet";
 import L from "leaflet";
 
@@ -23,8 +22,8 @@ type TimeSliderProps = {
 function TimeSlider({ handleChange, value, max, label }: TimeSliderProps) {
     return (
         <>
-            <div className="absolute bottom-2 left-2 z-1000 rounded-3xl bg-neutral-50/30 p-4 backdrop-blur dark:bg-neutral-950/30">
-                <p>Time</p>
+            <div className="absolute bottom-2 left-2 z-1000 rounded-3xl bg-neutral-950/30 p-4 backdrop-blur">
+                <p className="text-white">Time</p>
                 <input
                     type="range"
                     min={0}
@@ -32,7 +31,7 @@ function TimeSlider({ handleChange, value, max, label }: TimeSliderProps) {
                     value={value}
                     onChange={handleChange}
                 />
-                <p>{label}</p>
+                <p className="text-white">{label}</p>
             </div>
         </>
     );
@@ -41,27 +40,27 @@ function TimeSlider({ handleChange, value, max, label }: TimeSliderProps) {
 function Legend() {
     return (
         <>
-            <div className="absolute right-2 bottom-2 z-1000 rounded-3xl bg-neutral-50/30 p-4 backdrop-blur dark:bg-neutral-950/30 flex flex-col gap-1">
-                <p>Legend</p>
+            <div className="absolute right-2 bottom-2 z-1000 flex flex-col gap-1 rounded-3xl bg-neutral-950/30 p-4 backdrop-blur">
+                <p className="text-white">Legend</p>
                 <div className="flex items-center gap-2">
                     <span className="inline-block h-4 w-4 rounded-full bg-green-300"></span>
-                    <p>Rain</p>
+                    <p className="text-white">Rain</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <span className="inline-block h-4 w-4 rounded-full bg-blue-300"></span>
-                    <p>Snow</p>
+                    <p className="text-white">Snow</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <span className="inline-block h-4 w-4 rounded-full bg-purple-300"></span>
-                    <p>Mix/Sleet</p>
+                    <p className="text-white">Mix/Sleet</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <span className="inline-block h-4 w-4 rounded-full bg-yellow-300"></span>
-                    <p>Hail/Rain</p>
+                    <p className="text-white">Hail/Rain</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <span className="inline-block h-4 w-4 rounded-full bg-red-300"></span>
-                    <p>FRZ Rain</p>
+                    <p className="text-white">FRZ Rain</p>
                 </div>
             </div>
         </>
@@ -81,12 +80,17 @@ function LayerChange({
     return null;
 }
 
-export default function Map() {
+type MapProps = {
+    lat: number;
+    lon: number;
+};
+
+export default function Map({ lat, lon }: MapProps) {
     const [radarTimes, setRadarTimes] = useState<string[]>([]);
     const [activeTime, setActiveTime] = useState<string>("");
     const [hrrrInitTime, setHRRRInitTime] = useState<string>("");
     const [layerType, setLayerType] = useState<LayerTypes>("radar");
-    const position: LatLngTuple = [43.65, -79.38];
+    const position: LatLngTuple = [lat, lon];
     const params = {
         opacity: 0.7,
         layers: "Radar_1km_SfcPrecipType",
@@ -170,6 +174,8 @@ export default function Map() {
             <MapContainer
                 center={position}
                 zoom={7}
+                maxZoom={18}
+                minZoom={3}
                 style={{ height: "86vh", borderRadius: "20px" }}
                 attributionControl={false}
             >
@@ -203,10 +209,8 @@ export default function Map() {
                         )}
                     </LayersControl.BaseLayer>
                 </LayersControl>
-                <TileLayer
-                    url="http://{s}.google.com/vt?lyrs=s,m&x={x}&y={y}&z={z}"
-                    subdomains={["mt0", "mt1", "mt2", "mt3"]}
-                />
+                <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
+                <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}" />
                 <div ref={controlsRef}>
                     <TimeSlider
                         value={currentTime === -1 ? 0 : currentTime}
@@ -215,10 +219,13 @@ export default function Map() {
                             layerType === "radar"
                                 ? new Date(activeTime).toLocaleString()
                                 : (() => {
-                                    const labelTime = new Date(hrrrInitTime);
-                                    labelTime.setMinutes(labelTime.getMinutes() + 15 * currentTime)
-                                    return labelTime.toLocaleString()
-                                })()
+                                      const labelTime = new Date(hrrrInitTime);
+                                      labelTime.setMinutes(
+                                          labelTime.getMinutes() +
+                                              15 * currentTime,
+                                      );
+                                      return labelTime.toLocaleString();
+                                  })()
                         }
                         handleChange={handleSliderChange}
                     />
