@@ -341,7 +341,7 @@ export default function App() {
         if (query.length >= 3) {
             const timer = setTimeout(() => {
                 fetchLocations(query);
-            }, 400)
+            }, 250)
             return () => clearTimeout(timer);
         } else setLocations(null)
     }, [query])
