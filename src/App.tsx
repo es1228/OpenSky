@@ -5,7 +5,7 @@ import "./App.css";
 import Logo from "./components/Logo";
 import Navbar from "./components/Navbar";
 import Searchbar from "./components/Searchbar";
-import LocationButton from "./components/LocationButton";
+import Button from "./components/Button";
 import HomePage from "./components/HomePage";
 import CurrentlyPage from "./components/CurrentlyPage";
 import HourlyPage from "./components/HourlyPage";
@@ -14,11 +14,11 @@ import Map from "./components/Map";
 import SettingsPage from "./components/SettingsPage";
 import Alert from "./components/Alert";
 
-type WeatherDataResponseParameters = {
+export type WeatherDataResponseParameters = {
     alerts: Array<{
         description: string;
         expires: number;
-        regions: Array<string>
+        regions: Array<string>;
         severity: string;
         time: number;
         title: string;
@@ -200,6 +200,14 @@ type PhotonFeature = {
     };
 };
 
+export type SavedLocationType = {
+    name: string;
+    summary: string;
+    temperature: string;
+    icon: string;
+    id: string;
+};
+
 export type Page =
     | "Home"
     | "Currently"
@@ -236,6 +244,12 @@ export default function App() {
     ]);
     const [locations, setLocations] = useState<PhotonFeature[] | null>(null);
     const [query, setQuery] = useState<string>("");
+    const [savedLocations, setSavedLocations] = useState<
+        SavedLocationType[] | null
+    >(() => {
+        const saved = localStorage.getItem("savedLocations");
+        return saved ? JSON.parse(saved) : null;
+    });
 
     useEffect(() => {
         const fetchApproxLocation = async () => {
@@ -341,10 +355,10 @@ export default function App() {
         if (query.length >= 3) {
             const timer = setTimeout(() => {
                 fetchLocations(query);
-            }, 250)
+            }, 250);
             return () => clearTimeout(timer);
-        } else setLocations(null)
-    }, [query])
+        } else setLocations(null);
+    }, [query]);
 
     const fetchLocations = async (value: string) => {
         try {
@@ -390,7 +404,47 @@ export default function App() {
         </li>
     ));
 
-    if (pageType === "Home") content = <HomePage />;
+    const handleDelete = (id: string) => {
+        const updatedLocations =
+            savedLocations?.filter((location) => location.id !== id) ??
+            savedLocations;
+        setSavedLocations(updatedLocations);
+        localStorage.setItem("savedLocations", JSON.stringify(updatedLocations));
+    };
+
+    const handleAdd = () => {
+        if (!weatherData) return;
+        const newLocation: SavedLocationType = {
+            id: `${weatherData.flags.nearestCity}, ${weatherData.flags.nearestCountry}`,
+            name: `${weatherData.flags.nearestCity}, ${iso1A2Code([weatherData.longitude, weatherData.latitude])}`,
+            summary: weatherData.currently.summary,
+            temperature: `${Math.round(weatherData.currently.temperature)}${units[2]}`,
+            icon: weatherData.currently.icon,
+        };
+        if (
+            savedLocations?.some(
+                (location) =>
+                    location.id ===
+                    `${weatherData.flags.nearestCity}, ${weatherData.flags.nearestCountry}`,
+            )
+        )
+            return;
+        const updatedLocations = savedLocations
+            ? [...savedLocations, newLocation]
+            : [newLocation];
+        setSavedLocations(updatedLocations);
+        localStorage.setItem("savedLocations", JSON.stringify(updatedLocations));
+    };
+
+    if (pageType === "Home")
+        content = (
+            <HomePage
+                savedLocations={savedLocations}
+                handleDelete={handleDelete}
+                handleAdd={handleAdd}
+                weatherData={weatherData}
+            />
+        );
     else if (pageType === "Currently")
         content = <CurrentlyPage weatherData={weatherData} units={units} />;
     else if (pageType === "Hourly")
@@ -433,7 +487,11 @@ export default function App() {
                         />
                     </div>
                     <div>
-                        <LocationButton handleClick={fetchLocation} />
+                        <Button
+                            handleClick={fetchLocation}
+                            icon="my_location"
+                            text="Current Location"
+                        />
                     </div>
                 </div>
             </section>

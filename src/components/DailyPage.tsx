@@ -17,6 +17,9 @@ export default function DailyPage({ weatherData, units }: WeatherPageProps) {
             windBearing={`${Math.round(day.windBearing)}°`}
             precipIntensity={`${day.precipIntensity.toFixed(2)} ${units[0]}`}
             precipAccumulation={`${day.precipAccumulation.toFixed(2)} ${units[1]}`}
+            liquidAccumulation={`${day.liquidAccumulation.toFixed(2)} ${units[1]}`}
+            snowAccumulation={`${day.snowAccumulation.toFixed(2)} ${units[1]}`}
+            iceAccumulation={`${day.iceAccumulation.toFixed(2)} ${units[1]}`}
             cloudCover={`${Math.round(day.cloudCover * 100)}%`}
             pressure={`${Math.round(day.pressure)} ${units[4]}`}
             uvIndex={`${Math.round(day.uvIndex)}`}

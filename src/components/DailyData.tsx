@@ -10,6 +10,9 @@ type DailyDataProps = {
     windBearing: string;
     precipIntensity: string;
     precipAccumulation: string;
+    liquidAccumulation: string;
+    snowAccumulation: string;
+    iceAccumulation: string;
     cloudCover: string;
     pressure: string;
     uvIndex: string;
@@ -29,6 +32,9 @@ export default function DailyData({
     windBearing,
     precipIntensity,
     precipAccumulation,
+    liquidAccumulation,
+    snowAccumulation,
+    iceAccumulation,
     cloudCover,
     pressure,
     uvIndex,
@@ -90,6 +96,18 @@ export default function DailyData({
                         <summary className="text-black dark:text-white">
                             Additional Info
                         </summary>
+                        <p className="text-nowrap text-black dark:text-white">
+                            Rain Accumulation: {liquidAccumulation}
+                        </p>
+                        <p className="text-nowrap text-black dark:text-white">
+                            Snow Accumulation: {snowAccumulation}
+                        </p>
+                        <p className="text-nowrap text-black dark:text-white">
+                            Ice Accumulation: {iceAccumulation}
+                        </p>
+                        <p className="text-black dark:text-white">
+                            Cloud Cover: {cloudCover}
+                        </p>
                         <p className="text-black dark:text-white">
                             Cloud Cover: {cloudCover}
                         </p>

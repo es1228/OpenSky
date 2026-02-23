@@ -17,6 +17,9 @@ export default function HourlyPage({ weatherData, units }: WeatherPageProps) {
             windBearing={`${Math.round(hour.windBearing)}°`}
             precipIntensity={`${hour.precipIntensity.toFixed(2)} ${units[0]}`}
             precipAccumulation={`${hour.precipAccumulation.toFixed(2)} ${units[1]}`}
+            liquidAccumulation={`${hour.liquidAccumulation.toFixed(2)} ${units[1]}`}
+            snowAccumulation={`${hour.snowAccumulation.toFixed(2)} ${units[1]}`}
+            iceAccumulation={`${hour.iceAccumulation.toFixed(2)} ${units[1]}`}
             icon={hour.icon}
         />
     ));

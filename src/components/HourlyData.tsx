@@ -10,6 +10,9 @@ type HourlyDataProps = {
     windBearing: string;
     precipIntensity: string;
     precipAccumulation: string;
+    liquidAccumulation: string;
+    snowAccumulation: string;
+    iceAccumulation: string;
     icon: string;
 };
 
@@ -25,6 +28,9 @@ export default function HourlyData({
     windBearing,
     precipIntensity,
     precipAccumulation,
+    liquidAccumulation,
+    snowAccumulation,
+    iceAccumulation,
     icon,
 }: HourlyDataProps) {
     return (
@@ -55,6 +61,9 @@ export default function HourlyData({
                             <p className="text-nowrap text-black dark:text-white">
                                 Dew Point: {dewPoint}
                             </p>
+                            <p className="text-nowrap text-black dark:text-white">
+                                Rain Accumulation: {liquidAccumulation}
+                            </p>
                         </div>
                         <div>
                             <p className="text-nowrap text-black dark:text-white">
@@ -63,6 +72,9 @@ export default function HourlyData({
                             <p className="text-nowrap text-black dark:text-white">
                                 Wind Gust: {windGust} @ {windBearing}
                             </p>
+                            <p className="text-nowrap text-black dark:text-white">
+                                Snow Accumulation: {snowAccumulation}
+                            </p>
                         </div>
                         <div>
                             <p className="text-nowrap text-black dark:text-white">
@@ -70,6 +82,9 @@ export default function HourlyData({
                             </p>
                             <p className="text-nowrap text-black dark:text-white">
                                 Precip Accumulation: {precipAccumulation}
+                            </p>
+                            <p className="text-nowrap text-black dark:text-white">
+                                Ice Accumulation: {iceAccumulation}
                             </p>
                         </div>
                     </div>

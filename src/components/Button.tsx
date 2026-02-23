@@ -1,8 +1,10 @@
-type LocationButtonProps = {
+type ButtonProps = {
     handleClick: () => void;
+    icon: string;
+    text: string;
 };
 
-export default function LocationButton({ handleClick }: LocationButtonProps) {
+export default function Button({ handleClick, icon, text }: ButtonProps) {
     return (
         <>
             <button
@@ -10,10 +12,10 @@ export default function LocationButton({ handleClick }: LocationButtonProps) {
                 onClick={handleClick}
             >
                 <span className="material-symbols-rounded text-black dark:text-white">
-                    my_location
+                    {icon}
                 </span>
                 <p className="hidden text-black md:block dark:text-white">
-                    Current Location
+                    {text}
                 </p>
             </button>
         </>
