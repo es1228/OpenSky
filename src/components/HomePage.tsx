@@ -8,16 +8,17 @@ type HomePageProps = {
     handleDelete: (id: string) => void;
     handleAdd: () => void;
     weatherData: WeatherDataResponseParameters | null;
+    unitType: string;
 };
 
-export default function HomePage({ savedLocations, handleDelete, handleAdd, weatherData }: HomePageProps) {
+export default function HomePage({ savedLocations, handleDelete, handleAdd, weatherData, unitType }: HomePageProps) {
     const items = savedLocations?.map((location) => (
         <SavedLocation
             name={location.name}
-            summary={location.summary}
-            temperature={location.temperature}
-            icon={location.icon}
+            lat={location.lat}
+            lon={location.lon}
             key={location.id}
+            unitType={unitType}
             onDelete={() => handleDelete(location.id)}
         />
     ));

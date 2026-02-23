@@ -202,9 +202,8 @@ type PhotonFeature = {
 
 export type SavedLocationType = {
     name: string;
-    summary: string;
-    temperature: string;
-    icon: string;
+    lat: number;
+    lon: number;
     id: string;
 };
 
@@ -417,9 +416,8 @@ export default function App() {
         const newLocation: SavedLocationType = {
             id: `${weatherData.flags.nearestCity}, ${weatherData.flags.nearestCountry}`,
             name: `${weatherData.flags.nearestCity}, ${iso1A2Code([weatherData.longitude, weatherData.latitude])}`,
-            summary: weatherData.currently.summary,
-            temperature: `${Math.round(weatherData.currently.temperature)}${units[2]}`,
-            icon: weatherData.currently.icon,
+            lat: weatherData.latitude,
+            lon: weatherData.longitude,
         };
         if (
             savedLocations?.some(
@@ -443,6 +441,7 @@ export default function App() {
                 handleDelete={handleDelete}
                 handleAdd={handleAdd}
                 weatherData={weatherData}
+                unitType={unitType}
             />
         );
     else if (pageType === "Currently")
