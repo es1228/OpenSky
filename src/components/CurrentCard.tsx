@@ -20,7 +20,7 @@ export default function CurrentCard({
                     Current Conditions
                 </h1>
                 <img
-                    src={`src/assets/${icon}.svg`}
+                    src={`${icon}.svg`}
                     alt={`${icon}`}
                     height={100}
                     width={100}

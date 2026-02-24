@@ -40,7 +40,7 @@ export default function HourlyData({
                 <div className="flex flex-col gap-4 md:flex-row md:items-center">
                     <div>
                         <img
-                            src={`src/assets/${icon}.svg`}
+                            src={`${icon}.svg`}
                             alt={`${icon}`}
                             height={100}
                             width={100}
