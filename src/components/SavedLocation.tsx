@@ -50,7 +50,7 @@ export default function SavedLocation({
                 <div className="flex flex-row items-center gap-4">
                     <div className="flex flex-row items-center gap-4">
                         <img
-                            src={`\\src\\assets\\${weatherData.currently.icon}.svg`}
+                            src={`src/assets/${weatherData.currently.icon}.svg`}
                             alt={`${weatherData.currently.icon}`}
                             className="h-10 w-10"
                         />

@@ -24,3 +24,15 @@
     color: #fff !important;
     border: none !important;
 }
+
+input[type="radio"]:not(.leaflet-control-layers-selector) {
+    position: absolute;
+    opacity: 0;
+}
+
+input[type="radio"]:checked ~ .radio {
+    background-color: #fff;
+    border-color: blue;
+    border-width: 5px;
+}
+

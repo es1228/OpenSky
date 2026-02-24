@@ -31,6 +31,7 @@ export default function SettingsPage({
                                     onChange={handleThemeChange}
                                     checked={theme === "light"}
                                 />
+                                <span className="radio h-4 w-4 rounded-full bg-neutral-50 dark:bg-neutral-950"></span>
                                 <label htmlFor="light">Light</label>
                             </div>
                             <div className="flex flex-row items-center gap-2">
@@ -42,6 +43,7 @@ export default function SettingsPage({
                                     onChange={handleThemeChange}
                                     checked={theme === "dark"}
                                 />
+                                <span className="radio h-4 w-4 rounded-full bg-neutral-50 dark:bg-neutral-950"></span>
                                 <label htmlFor="dark">Dark</label>
                             </div>
                             <div className="flex flex-row items-center gap-2">
@@ -53,6 +55,7 @@ export default function SettingsPage({
                                     onChange={handleThemeChange}
                                     checked={theme === "system"}
                                 />
+                                <span className="radio h-4 w-4 rounded-full bg-neutral-50 dark:bg-neutral-950"></span>
                                 <label htmlFor="system">System</label>
                             </div>
                         </div>
@@ -73,6 +76,7 @@ export default function SettingsPage({
                                     onChange={handleUnitChange}
                                     checked={unitType === "ca"}
                                 />
+                                <span className="radio h-4 w-4 rounded-full bg-neutral-50 dark:bg-neutral-950"></span>
                                 <label htmlFor="ca">CA (SI + km/h)</label>
                             </div>
                             <div className="flex flex-row items-center gap-2">
@@ -84,6 +88,7 @@ export default function SettingsPage({
                                     onChange={handleUnitChange}
                                     checked={unitType === "uk"}
                                 />
+                                <span className="radio h-4 w-4 rounded-full bg-neutral-50 dark:bg-neutral-950"></span>
                                 <label htmlFor="uk">UK (SI + mph)</label>
                             </div>
                             <div className="flex flex-row items-center gap-2">
@@ -95,6 +100,7 @@ export default function SettingsPage({
                                     onChange={handleUnitChange}
                                     checked={unitType === "us"}
                                 />
+                                <span className="radio h-4 w-4 rounded-full bg-neutral-50 dark:bg-neutral-950"></span>
                                 <label htmlFor="us">US (Imperial)</label>
                             </div>
                             <div className="flex flex-row items-center gap-2">
@@ -106,6 +112,7 @@ export default function SettingsPage({
                                     onChange={handleUnitChange}
                                     checked={unitType === "si"}
                                 />
+                                <span className="radio h-4 w-4 rounded-full bg-neutral-50 dark:bg-neutral-950"></span>
                                 <label htmlFor="si">SI</label>
                             </div>
                             <div className="flex flex-row items-center gap-2">
@@ -117,6 +124,7 @@ export default function SettingsPage({
                                     onChange={handleUnitChange}
                                     checked={unitType === "auto"}
                                 />
+                                <span className="radio h-4 w-4 rounded-full bg-neutral-50 dark:bg-neutral-950"></span>
                                 <label htmlFor="auto">Auto</label>
                             </div>
                         </div>

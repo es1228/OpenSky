@@ -455,6 +455,7 @@ export default function App() {
             <Map
                 lat={weatherData?.latitude ?? 51.5072}
                 lon={weatherData?.longitude ?? 0.1276}
+                
             />
         );
     else if (pageType === "Settings")
@@ -499,7 +500,7 @@ export default function App() {
             </div>
             <section className="navbar">
                 <div className="fixed right-0 bottom-5 z-10000 flex w-full flex-1 justify-center md:top-20 md:left-5 md:w-48 md:justify-start">
-                    <Navbar handlePageChange={(p: Page) => setPageType(p)} />
+                    <Navbar handlePageChange={(p: Page) => setPageType(p)} pageType={pageType} />
                 </div>
                 <div className="mx-4 mt-20 flex flex-col gap-4 md:ml-60">
                     <Alert weatherData={weatherData} units={units} />
