@@ -25,6 +25,10 @@
     border: none !important;
 }
 
+.leaflet-container {
+    @apply rounded-3xl h-[70vh] md:h-[80vh];
+}
+
 input[type="radio"]:not(.leaflet-control-layers-selector) {
     position: absolute;
     opacity: 0;

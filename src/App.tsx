@@ -279,6 +279,7 @@ export default function App() {
             () => console.error("Unable to get location"),
             options,
         );
+        setPageType("Currently");
     };
 
     useEffect(() => {
@@ -346,6 +347,7 @@ export default function App() {
             location[0],
         ])?.toLowerCase();
         if (countryCode) setCountry(countryCode);
+        setPageType("Currently");
     };
     const handleBlur = () => setLocations(null);
     const handleFocus = () => fetchLocations(query);
@@ -408,7 +410,10 @@ export default function App() {
             savedLocations?.filter((location) => location.id !== id) ??
             savedLocations;
         setSavedLocations(updatedLocations);
-        localStorage.setItem("savedLocations", JSON.stringify(updatedLocations));
+        localStorage.setItem(
+            "savedLocations",
+            JSON.stringify(updatedLocations),
+        );
     };
 
     const handleAdd = () => {
@@ -431,7 +436,10 @@ export default function App() {
             ? [...savedLocations, newLocation]
             : [newLocation];
         setSavedLocations(updatedLocations);
-        localStorage.setItem("savedLocations", JSON.stringify(updatedLocations));
+        localStorage.setItem(
+            "savedLocations",
+            JSON.stringify(updatedLocations),
+        );
     };
 
     if (pageType === "Home")
@@ -455,7 +463,6 @@ export default function App() {
             <Map
                 lat={weatherData?.latitude ?? 51.5072}
                 lon={weatherData?.longitude ?? 0.1276}
-                
             />
         );
     else if (pageType === "Settings")
@@ -500,10 +507,15 @@ export default function App() {
             </div>
             <section className="navbar">
                 <div className="fixed right-0 bottom-5 z-10000 flex w-full flex-1 justify-center md:top-20 md:left-5 md:w-48 md:justify-start">
-                    <Navbar handlePageChange={(p: Page) => setPageType(p)} pageType={pageType} />
+                    <Navbar
+                        handlePageChange={(p: Page) => setPageType(p)}
+                        pageType={pageType}
+                    />
                 </div>
                 <div className="mx-4 mt-20 flex flex-col gap-4 md:ml-60">
-                    <Alert weatherData={weatherData} units={units} />
+                    {pageType !== "Radar" && (
+                        <Alert weatherData={weatherData} units={units} />
+                    )}
                     {content}
                 </div>
             </section>

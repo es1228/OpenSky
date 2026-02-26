@@ -176,7 +176,6 @@ export default function Map({ lat, lon }: MapProps) {
                 zoom={7}
                 maxZoom={18}
                 minZoom={3}
-                style={{ height: "86vh", borderRadius: "20px" }}
                 attributionControl={false}
             >
                 <LayerChange setLayerType={setLayerType} />
