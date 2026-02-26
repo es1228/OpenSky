@@ -1,16 +1,18 @@
-# React + Vite
+# OpenSky
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An open source weather application.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Weather alerts
+- Location saving
+- Location Search + Current Location
+- Automatic units
+- Light/Dark mode
+- Currently, Hourly, Daily, Radar Pages
+- Radar Archive + HRRR with precipitation types (Rain, Snow, Hail, Sleet, Freezing Rain) (US & Southern Canada Only)
+- Various different weather condition support (Thunderstorm, Freezing Rain, Ice, etc.,)
+- Persistent settings in localstorage.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Screenshots
+<img width="1919" height="911" alt="Screenshot 2026-02-23 205040" src="https://github.com/user-attachments/assets/31cedd1b-3556-4919-b315-22901df5b895" />
