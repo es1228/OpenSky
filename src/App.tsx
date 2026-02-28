@@ -275,6 +275,7 @@ export default function App() {
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
                 setLocation([lat, lon]);
+                setCountry(iso1A2Code([lon, lat])?.toLowerCase() ?? country);
             },
             () => console.error("Unable to get location"),
             options,
