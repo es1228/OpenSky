@@ -52,7 +52,7 @@ export default function CurrentlyPage({
                     <h1 className="text-lg font-bold text-black dark:text-white">
                         Highlights
                     </h1>
-                    <div className="flex flex-row flex-wrap gap-3">
+                    <div className="flex flex-row flex-wrap gap-3 my-auto">
                         <InfoCard
                             title="Wind"
                             icon="air"

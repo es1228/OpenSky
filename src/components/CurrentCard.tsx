@@ -22,8 +22,8 @@ export default function CurrentCard({
                 <img
                     src={`${icon}.svg`}
                     alt={`${icon}`}
-                    height={100}
-                    width={100}
+                    height={80}
+                    width={80}
                 />
                 <h1 className="text-5xl text-black dark:text-white">
                     {temperature}
