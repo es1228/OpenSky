@@ -40,8 +40,6 @@ export default defineConfig({
 					{
 						src: "partly-cloudy-day.svg",
 						sizes: "any",
-						type: "image/svg+xml",
-						purpose: "any maskable",
 					},
 				],
 			},
