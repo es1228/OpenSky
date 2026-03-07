@@ -7,11 +7,12 @@ type HomePageProps = {
     savedLocations: SavedLocationType[] | null;
     handleDelete: (id: string) => void;
     handleAdd: () => void;
+    handleClick: (lat: number, lon: number) => void; 
     weatherData: WeatherDataResponseParameters | null;
     unitType: string;
 };
 
-export default function HomePage({ savedLocations, handleDelete, handleAdd, weatherData, unitType }: HomePageProps) {
+export default function HomePage({ savedLocations, handleDelete, handleAdd, handleClick, weatherData, unitType }: HomePageProps) {
     const items = savedLocations?.map((location) => (
         <SavedLocation
             name={location.name}
@@ -20,6 +21,7 @@ export default function HomePage({ savedLocations, handleDelete, handleAdd, weat
             key={location.id}
             unitType={unitType}
             onDelete={() => handleDelete(location.id)}
+            onClick={() => handleClick(location.lat, location.lon)}
         />
     ));
     if (!weatherData) return;

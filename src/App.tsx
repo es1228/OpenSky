@@ -449,6 +449,9 @@ export default function App() {
                 savedLocations={savedLocations}
                 handleDelete={handleDelete}
                 handleAdd={handleAdd}
+                handleClick={(lat: number, lon: number) =>
+                    handleLocationClick([lat, lon])
+                }
                 weatherData={weatherData}
                 unitType={unitType}
             />
