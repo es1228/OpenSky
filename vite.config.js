@@ -17,10 +17,9 @@ export default defineConfig({
 				description: "An open source weather application",
 				id: "/OpenSky/",
 				start_url: "/OpenSky/",
-				display: "fullscreen",
+				display: "standalone",
 				orientation: "portrait",
 				background_color: "#000",
-        theme_color: "#000",
 				screenshots: [
 					{
 						src: "screenshot_desktop.png",
@@ -42,13 +41,7 @@ export default defineConfig({
 						src: "partly-cloudy-day.svg",
 						sizes: "any",
 						type: "image/svg+xml",
-						purpose: "maskable",
-					},
-          {
-						src: "appicon.png",
-						sizes: "512x512",
-						type: "image/png",
-						purpose: "any",
+						purpose: "any maskable",
 					},
 				],
 			},
