@@ -13,13 +13,15 @@
   "dependencies": {
     "@ideditor/country-coder": "^5.1.0",
     "@tailwindcss/vite": "^4.1.18",
+    "@vite-pwa/assets-generator": "^1.0.2",
     "country-coder": "^2.1.0",
     "leaflet": "^1.9.4",
     "leaflet-timedimension": "^1.1.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-leaflet": "^5.0.0",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "vite-plugin-pwa": "^0.19.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
