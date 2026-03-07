@@ -11,21 +11,16 @@ export default defineConfig({
 		VitePWA({
 			registerType: "autoUpdate",
 			injectRegister: "auto",
-			includeAssets: [
-				"screenshot_desktop.png",
-				"screenshot_mobile.png",
-				"partly-cloudy-day.svg",
-				"appicon.png",
-			],
 			manifest: {
 				name: "OpenSky (Weather Application)",
 				short_name: "OpenSky",
 				description: "An open source weather application",
 				id: "/OpenSky/",
-        start_url: "/OpenSky/",
+				start_url: "/OpenSky/",
 				display: "fullscreen",
 				orientation: "portrait",
 				background_color: "#000",
+        theme_color: "#000",
 				screenshots: [
 					{
 						src: "screenshot_desktop.png",
@@ -43,22 +38,16 @@ export default defineConfig({
 					},
 				],
 				icons: [
-          {
-						src: "appicon.png",
-						sizes: "512x512",
-						type: "image/png",
-						purpose: "any",
-					},
-          {
-						src: "appicon.png",
-						sizes: "512x512",
-						type: "image/png",
-						purpose: "maskable",
-					},
 					{
 						src: "partly-cloudy-day.svg",
-            sizes: "512x512",
+						sizes: "any",
 						type: "image/svg+xml",
+						purpose: "maskable",
+					},
+          {
+						src: "appicon.png",
+						sizes: "512x512",
+						type: "image/png",
 						purpose: "any",
 					},
 				],
