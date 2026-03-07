@@ -15,6 +15,7 @@
     "@tailwindcss/vite": "^4.1.18",
     "@vite-pwa/assets-generator": "^1.0.2",
     "country-coder": "^2.1.0",
+    "gh-pages": "^6.3.0",
     "leaflet": "^1.9.4",
     "leaflet-timedimension": "^1.1.1",
     "react": "^19.2.0",
