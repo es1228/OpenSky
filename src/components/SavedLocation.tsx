@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { iso1A2Code } from "country-coder";
 import Button from "./Button";
-import { WeatherDataResponseParameters } from "../App";
+import { WeatherDataResponseParameters } from "../types/types";
 
 type SavedLocationProps = {
     name: string;

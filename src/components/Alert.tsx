@@ -1,4 +1,4 @@
-import { WeatherPageProps } from "../App";
+import { WeatherPageProps } from "../types/types";
 
 export default function Alert({ weatherData }: WeatherPageProps) {
     const alerts = weatherData?.alerts.map((alert) => (

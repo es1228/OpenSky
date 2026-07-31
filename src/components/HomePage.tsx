@@ -1,18 +1,25 @@
 import SavedLocation from "./SavedLocation";
 import Button from "./Button";
-import { SavedLocationType, WeatherDataResponseParameters, WeatherPageProps } from "../App";
 import { iso1A2Code } from "country-coder";
+import { SavedLocationType, WeatherDataResponseParameters } from "../types/types";
 
 type HomePageProps = {
     savedLocations: SavedLocationType[] | null;
     handleDelete: (id: string) => void;
     handleAdd: () => void;
-    handleClick: (lat: number, lon: number) => void; 
+    handleClick: (lat: number, lon: number) => void;
     weatherData: WeatherDataResponseParameters | null;
     unitType: string;
 };
 
-export default function HomePage({ savedLocations, handleDelete, handleAdd, handleClick, weatherData, unitType }: HomePageProps) {
+export default function HomePage({
+    savedLocations,
+    handleDelete,
+    handleAdd,
+    handleClick,
+    weatherData,
+    unitType,
+}: HomePageProps) {
     const items = savedLocations?.map((location) => (
         <SavedLocation
             name={location.name}
@@ -32,7 +39,11 @@ export default function HomePage({ savedLocations, handleDelete, handleAdd, hand
                     <h1 className="text-3xl text-black dark:text-white">
                         Saved Locations
                     </h1>
-                    <Button handleClick={handleAdd} icon="add" text={`Add ${weatherData.flags.nearestCity}, ${iso1A2Code([weatherData.longitude, weatherData.latitude])}`} />
+                    <Button
+                        handleClick={handleAdd}
+                        icon="add"
+                        text={`Add ${weatherData.flags.nearestCity}, ${iso1A2Code([weatherData.longitude, weatherData.latitude])}`}
+                    />
                 </div>
             </div>
             {items && items.length > 0 ? (

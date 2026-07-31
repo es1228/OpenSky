@@ -1,5 +1,5 @@
+import { WeatherPageProps } from "../types/types";
 import HourlyData from "./HourlyData";
-import { WeatherPageProps } from "../App";
 
 export default function HourlyPage({ weatherData, units }: WeatherPageProps) {
     if (!weatherData) return;

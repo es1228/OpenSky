@@ -1,4 +1,4 @@
-import { Page } from "../App";
+import { Page } from "../types/types";
 
 type NavbarProps = {
     handlePageChange: (p: Page) => void;

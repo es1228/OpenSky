@@ -1,6 +1,6 @@
+import { WeatherPageProps } from "../types/types";
 import CurrentCard from "./CurrentCard";
 import InfoCard from "./InfoCard";
-import { WeatherPageProps } from "../App";
 
 export default function CurrentlyPage({
     weatherData,
@@ -100,20 +100,20 @@ export default function CurrentlyPage({
                 <InfoCard
                     title="Rain Accumulation"
                     icon="rainy"
-                    summary={`${Math.round(weatherData.currently.currentDayLiquid)} ${units[1]}`}
-                    other={`${Math.max(0, Math.round(weatherData.daily.data[0].liquidAccumulation) - Math.round(weatherData.currently.currentDayLiquid))} ${units[1]} More Expected`}
+                    summary={`${weatherData.currently.currentDayLiquid.toFixed(2)} ${units[1]}`}
+                    other={`${(weatherData.daily.data[0].liquidAccumulation - Math.round(weatherData.currently.currentDayLiquid)).toFixed(2)} ${units[1]} More Expected`}
                 />
                 <InfoCard
                     title="Snow Accumulation"
                     icon="weather_snowy"
                     summary={`${Math.round(weatherData.currently.currentDaySnow)} ${units[1]}`}
-                    other={`${Math.max(0, Math.round(weatherData.daily.data[0].snowAccumulation) - Math.round(weatherData.currently.currentDaySnow))} ${units[1]} More Expected`}
+                    other={`${(weatherData.daily.data[0].snowAccumulation - Math.round(weatherData.currently.currentDaySnow)).toFixed(2)} ${units[1]} More Expected`}
                 />
                 <InfoCard
                     title="Ice Accumulation"
                     icon="weather_hail"
                     summary={`${Math.round(weatherData.currently.currentDayIce)} ${units[1]}`}
-                    other={`${Math.max(0, Math.round(weatherData.daily.data[0].iceAccumulation) - Math.round(weatherData.currently.currentDayIce))} ${units[1]} More Expected`}
+                    other={`${(weatherData.daily.data[0].iceAccumulation - Math.round(weatherData.currently.currentDayIce)).toFixed(2)} ${units[1]} More Expected`}
                 />
             </div>
         </>
