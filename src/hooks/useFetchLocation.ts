@@ -9,11 +9,10 @@ const useFetchLocation = (goToCurrently: () => void) => {
     useEffect(() => {
         const fetchApproxLocation = async () => {
             try {
-                const response = await fetch("https://ipinfo.io/json");
+                const response = await fetch("https://ipapi.co/json/");
                 const data = await response.json();
-                const [lat, lon] = await data.loc.split(",");
-                setLocation([lat, lon]);
-                const countryCode = iso1A2Code([lon, lat])?.toLowerCase();
+                setLocation([data.latitude, data.longitude]);
+                const countryCode = iso1A2Code([data.longitude, data.latitude])?.toLowerCase();
                 if (countryCode) setCountry(countryCode);
             } catch {
                 console.error("Unable to fetch approx lat and lon");
